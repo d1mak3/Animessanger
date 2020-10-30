@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace ClientForMessenger
@@ -38,7 +38,11 @@ namespace ClientForMessenger
 
     public void SendMessage(Message _message) // Отправляем сообщение заданное объектом
     {
-      string messageToJson = JsonSerializer.Serialize(_message); // Превращаем наше сообщение в формат Json
+      StringWriter Jsonwriter = new StringWriter(); // Сюда записываем результат сериализации
+
+      // Сериализуем сообщение
+      var serializer = new JsonSerializer();
+      serializer.Serialize(Jsonwriter, _message);
 
       // Создаём POST запрос, с json'ом
       var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://localhost:5000/api/message");
@@ -48,7 +52,7 @@ namespace ClientForMessenger
       // Записываем наше json сообщение в поток запроса
       using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
       {
-        streamWriter.Write(messageToJson);
+        streamWriter.Write(Jsonwriter);
       }
 
       // Получаем ответ
@@ -59,19 +63,26 @@ namespace ClientForMessenger
       }
     }
 
-    public void GetMessage(out Message _message, in int _id) // Получаем сообщение по id                        Надо будет заменить WebRequest и т.п. на HttpWebRequest и т.п.
+    static public void GetMessage(out Message _message, in int _id) // Получаем сообщение по id                      
     {
       // Создаём запрос
-      WebRequest _request = WebRequest.Create("http://localhost:5000/api/message/" + $"{_id}"); 
+      WebRequest _request = WebRequest.Create("http://localhost:5000/api/message/" + $"{_id}");
       WebResponse _response = _request.GetResponse();
 
-      using (Stream stream = _response.GetResponseStream()) // Читаем ответ в Stream (потому что GetResponseStream возвращает обычный Stream)
+      // Записываем овет в строку
+      string serializedMessage;
+      using (Stream stream = _response.GetResponseStream())
       {
-        using (StreamReader reader = new StreamReader(stream)) // Читаем поток, который нам вернул сервер
-        {                   
-          _message = JsonSerializer.Deserialize<Message>(reader.ReadToEnd()); // Превращаем поток в объект = сообщение          
+        using (StreamReader reader = new StreamReader(stream))
+        {
+          serializedMessage = reader.ReadToEnd();
         }
       }
+
+      // Десериализуем строку с ответом
+      var Jsonserializer = new JsonSerializer();
+      _message = (Message)Jsonserializer.Deserialize(new StringReader(serializedMessage), typeof(Message));
+
       _response.Close(); // Закрываем поток ответа
     }
   }
