@@ -14,15 +14,25 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ClientForMessenger
-{
-  /// <summary>
-  /// Логика взаимодействия для MainWindow.xaml
-  /// </summary>
+{  
   public partial class MainWindow : Window
-  {
+  {  
     public MainWindow()
     {
-      InitializeComponent();
-    }
+      InitializeComponent();  
+    }    
+
+    private void Main_Loaded_1(object sender, RoutedEventArgs e)
+    {
+      // Создаём окошко с логином
+      LoginWindow login = new LoginWindow();
+      login.Owner = this;
+      this.Visibility = Visibility.Hidden;
+      login.Show();
+
+      ContactsPanel.Children.Add(new TextBlock { Text = "Даня" });
+      MessagePanel.Children.Add(new TextBlock { Text = "Привет" });
+         
+    }    
   }
 }
