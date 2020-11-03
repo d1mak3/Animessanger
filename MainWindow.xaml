@@ -5,22 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
-        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" Icon="Resources/senchou.png">
-    
-    <Grid x:Name="MainContainer">
+        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" Icon="Resources/senchou.png" SizeChanged="Main_SizeChanged">
+
+    <Grid x:Name="MainContainer" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="205*"></ColumnDefinition>
             <ColumnDefinition Width="587*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>        
-        <StackPanel x:Name="ContactsPanel" Grid.Column="0"></StackPanel>        
-        <Grid Grid.Column="1">            
+        </Grid.ColumnDefinitions>
+
+        <!--Контакты-->
+        <Border BorderBrush="Gray" BorderThickness="1" Margin="-1, -1, -1, -1">
+            <StackPanel x:Name="ContactsPanel" Grid.Column="0"></StackPanel>
+        </Border>
+        <Border BorderBrush="Gray" BorderThickness="1" Grid.Row="1"/>
+        <!--Сообщения-->
+        <!--Список сообщений-->
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="61*"></RowDefinition>
-                <RowDefinition Height="9*"></RowDefinition>
+                <RowDefinition Height="389*"></RowDefinition>
+                <RowDefinition Height="31*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Border BorderBrush="Gray" BorderThickness="2">
+            <Border BorderBrush="Gray" BorderThickness="2" Margin="-1,-1,-1, -1">
                 <StackPanel x:Name="MessagePanel" Grid.Row="0"></StackPanel>
             </Border>
-        </Grid>        
-    </Grid>    
+            <!--Ввод и кнопка отправки-->
+            <TextBox Grid.Row="1" HorizontalAlignment="Left" MinWidth="500" x:Name="TypeTextBox"/>
+            <Button Grid.Row="1" HorizontalAlignment="Right" MinWidth="80" Content="Send" x:Name="SendButton" Click="SendButton_Click"/>
+        </Grid>
+    </Grid>
 </Window>
