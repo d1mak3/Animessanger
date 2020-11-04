@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
         Title="Login" Height="450" Width="310.584" Icon="Resources/senchou.png">
-    <Grid Background="#FFD32442">
+    <Grid Background="#283673">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="103*"/>
             <ColumnDefinition Width="200*"/>
@@ -20,9 +20,9 @@
             <RowDefinition Height="58*"></RowDefinition>
         </Grid.RowDefinitions>
         <Image Grid.Row="1" Source="Resources/Senchou.png" Grid.ColumnSpan="2" />
-        <Image Grid.Row="2" Source="Resources/Animessenger.png" MaxWidth="275" Grid.ColumnSpan="2"/>
-        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2"/>
-        <TextBox Grid.Row="4" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2"/>
-        <Button Grid.Row="5" Background="DarkRed" Content="Login" FontSize="30" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Grid.ColumnSpan="2"></Button>
+        <Image Grid.Row="2" Source="Resources/Логотип.png" MaxWidth="275" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Margin="0,0,0,0.2" Grid.ColumnSpan="2" Text="Login:"/>
+        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Margin="0,47,0,0.4" Grid.RowSpan="2" Text="Pass:"/>
+        <Button Grid.Row="5" Background="Transparent" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
