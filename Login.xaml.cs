@@ -31,7 +31,7 @@ namespace ClientForMessenger
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      Owner.Visibility = Visibility.Visible;
+      Owner.Visibility = Visibility.Visible;      
       this.Close();
     }
   }

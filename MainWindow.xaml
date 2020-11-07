@@ -26,7 +26,7 @@
                 <RowDefinition Height="31*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="2" Margin="-1,-1,-1, -1">
-                <StackPanel x:Name="MessagePanel" Grid.Row="0"></StackPanel>
+                <StackPanel x:Name="MessagePanel" Grid.Row="0" Loaded="MessagePanel_Loaded"></StackPanel>
             </Border>
             <!--Ввод и кнопка отправки-->
             <TextBox Grid.Row="1" HorizontalAlignment="Left" MinWidth="500" x:Name="TypeTextBox"/>

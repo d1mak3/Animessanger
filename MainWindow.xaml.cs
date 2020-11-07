@@ -20,6 +20,7 @@ namespace ClientForMessenger
   {
     MessagesOperationHandler operation = new MessagesOperationHandler();
 
+
     public MainWindow()
     {
       InitializeComponent();  
@@ -35,8 +36,7 @@ namespace ClientForMessenger
 
      
       ContactsPanel.Children.Add(new TextBlock { Text = "Дима" }); // Пример юзера
-      MessagePanel.Children.Add(new TextBlock { Text = "Дима\nПривет" }); // Пример сообщения
-      // this.GetMessages()
+      MessagePanel.Children.Add(new TextBlock { Text = "Дима\nПривет" }); // Пример сообщения     
     }
 
     private void Main_SizeChanged(object sender, SizeChangedEventArgs e) // Меняем ввод и кнопку в зависимости от размеров окошка
@@ -45,22 +45,44 @@ namespace ClientForMessenger
       SendButton.Width = this.Width / 10;
     }
 
-    public async void GetMessages()
+    /* public async void GetMessages(StackPanel _MessagePanel)
+     {
+       Message get = new Message();
+       int currentID = 0;
+       await Task.Run(() =>
+       {
+         while (true)
+         {
+           operation.GetMessage(out get, currentID++);
+           if (get.message != "Message doesnt exist")
+           {
+             _MessagePanel.Children.Add(new TextBlock { Text = $"{get.userName}\n{get.message}" });
+             ++currentID;
+           }
+         }        
+       });
+     }*/
+
+    public async Task GetMessages()
     {
-      Message get = new Message();
+      List<Message> get = new List<Message>();
       int currentID = 0;
-      await Task.Run(() =>
+
+      while (true)
       {
-        while (true)
+        Dispatcher.Invoke(() =>
         {
-          operation.GetMessage(out get, currentID++);
-          if (get.message != "Message doesnt exist")
+          operation.GetMessages(out get);          
+          if (get.Count != 0)
           {
-            MessagePanel.Children.Add(new TextBlock { Text = $"{get.userName}\n{get.message}" });
-            ++currentID;
+            MessagePanel.Children.Clear();
+            foreach(Message m in get)
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}" });
+            ++currentID;            
           }
-        }        
-      });
+        });
+        await Task.Delay(51);
+      }      
     }
 
     private void SendButton_Click(object sender, RoutedEventArgs e) // Отправка сообщений
@@ -69,8 +91,14 @@ namespace ClientForMessenger
       {
         Message newMessage = new Message("Server", TypeTextBox.Text);
         operation.SendMessage(newMessage);
+        // MessagePanel.Children.Add(new TextBlock { Text = $"{newMessage.userName}" + "\n" + $"{newMessage.message}" });
         TypeTextBox.Text = String.Empty;
       }
+    }
+
+    private async void MessagePanel_Loaded(object sender, RoutedEventArgs e)
+    {
+      await GetMessages();
     }
   }
 }

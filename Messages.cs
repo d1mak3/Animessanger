@@ -63,10 +63,10 @@ namespace ClientForMessenger
       }
     }
 
-    static public void GetMessage(out Message _message, in int _id) // Получаем сообщение по id                      
+    public void GetMessages(out List<Message> _messages) // Получаем сообщение по id                      
     {
       // Создаём запрос
-      WebRequest _request = WebRequest.Create("http://localhost:5000/api/message/" + $"{_id}");
+      WebRequest _request = WebRequest.Create("http://localhost:5000/api/message/");
       WebResponse _response = _request.GetResponse();
 
       // Записываем овет в строку
@@ -77,12 +77,17 @@ namespace ClientForMessenger
         {
           serializedMessage = reader.ReadToEnd();
         }
-      }
-
-      // Десериализуем строку с ответом
+      }      
+      // Десериализуем (пытаемся) строку с ответом
       var Jsonserializer = new JsonSerializer();
-      _message = (Message)Jsonserializer.Deserialize(new StringReader(serializedMessage), typeof(Message));
-
+      if (serializedMessage != "Message doesnt exist")
+        _messages = (List<Message>)Jsonserializer.Deserialize(new StringReader(serializedMessage), typeof(List<Message>));
+      else
+      {
+        List<Message> MDE = new List<Message>();
+        _messages = MDE;
+      }
+      
       _response.Close(); // Закрываем поток ответа
     }
   }
