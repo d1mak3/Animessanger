@@ -1,7 +1,0 @@
-{"userName":"Server","message":"\u041F\u043E\u043A\u0430","time":"2020-11-08T19:47:30.2932932Z"}
-{"userName":"Server","message":"\u041F\u0440\u0438\u0432\u0435\u0442","time":"2020-11-08T19:49:45.0289996Z"}
-{"userName":"Server","message":"\u041F\u043E\u043A\u0430","time":"2020-11-08T19:49:51.1843517Z"}
-{"userName":"Server","message":"Hello World!!!","time":"2020-11-08T20:00:08.025633Z"}
-{"userName":"Server","message":"My name is Dima","time":"2020-11-08T20:00:12.8419085Z"}
-{"userName":"Server","message":"\u041F\u0440\u0438\u0432\u0435\u0442","time":"2020-11-08T20:02:18.9151194Z"}
-{"userName":"Server","message":"\u041F\u043E\u043A\u0430","time":"2020-11-08T20:02:21.5322691Z"}

@@ -22,7 +22,7 @@ namespace ServerForMessanger.Controllers
     public string GetAllMessages() // Получаем все сообщения
     {
       // Если в списке нет сообщений пробуем загрузить их из файла
-      if (allMessages.messages.Count == 1)
+      if (allMessages.messages.Count == 0)
       {
         StreamReader readMessageInFile = new StreamReader("History.txt");
         string reader;
@@ -30,6 +30,7 @@ namespace ServerForMessanger.Controllers
         {
           allMessages.AddMessage(JsonSerializer.Deserialize<Message>(reader));
         }
+        readMessageInFile.Close();
       }      
 
       var messagesFromJson = JsonSerializer.Serialize(allMessages.messages);
@@ -41,7 +42,7 @@ namespace ServerForMessanger.Controllers
     public string GetMessageFromID(int id) // Получаем сообщение по айди
     {
       // Если в списке нет сообщений пробуем загрузить их из файла
-      if (allMessages.messages.Count == 1)
+      if (allMessages.messages.Count == 0)
       {
         StreamReader readMessageInFile = new StreamReader("History.txt");
         string reader;
@@ -49,6 +50,7 @@ namespace ServerForMessanger.Controllers
         {
           allMessages.AddMessage(JsonSerializer.Deserialize<Message>(reader));
         }
+        readMessageInFile.Close();
       }
 
       string message = "Message doesnt exist";
@@ -67,7 +69,33 @@ namespace ServerForMessanger.Controllers
 
       allMessages.AddMessage(_newMessage.userName, _newMessage.message);
     }
-     
-    
+
+    // DELETE api/messages
+    [HttpDelete]
+    public void ListClear()
+    {
+      StreamWriter writeMessageInFile = new StreamWriter("History.txt", false);
+      writeMessageInFile.Close();
+
+      allMessages.messages.Clear();
+    }
+
+
+    // DELETE api/messages/1
+    [HttpDelete("{id}")]
+    public void DelteElement(int id)
+    {
+      if (id < allMessages.messages.Count && id >= 0)
+      {
+        allMessages.messages.RemoveAt(id);
+
+        StreamWriter writeMessageInFile = new StreamWriter("History.txt", false);
+        foreach(Message m in allMessages.messages)
+        {
+          writeMessageInFile.WriteLine(JsonSerializer.Serialize(m));
+        }
+        writeMessageInFile.Close();
+      }
+    }
   }
 }

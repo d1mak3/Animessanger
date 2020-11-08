@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj": {}
+    "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj": {
+    "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj",
+        "projectUniqueName": "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj",
         "projectName": "ServerForMessanger",
-        "projectPath": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj",
+        "projectPath": "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj",
         "packagesPath": "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\obj\\",
+        "outputPath": "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ДИМОООООООН\\AppData\\Roaming\\NuGet\\NuGet.Config",

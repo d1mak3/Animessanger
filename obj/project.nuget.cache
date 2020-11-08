@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lt5xIhhiOk0DR1BZCY9+xSQRhdUpU5o6fCbntGQGLDmXY9GC8YYIdsFGD1pOgy1ziTiB+tGiRQ8FgJdtE/NimQ==",
+  "dgSpecHash": "ZqdE76RS3IpKXyhcJu1+4ggLlmGDAwHpktyUsOb3cSTD5JJsttY7F7lrl6jO2mfKGa2meWIZEW0GsfBEE5leDA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj",
+  "projectFilePath": "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512"

@@ -32,9 +32,7 @@ namespace ServerForMessanger
 
     public MessagesHandler()
     {
-      messages.Clear();
-      Message defaultMessage = new Message();
-      messages.Add(defaultMessage);
+      messages.Clear();      
     }
 
     public MessagesHandler(List<Message> _messages)
