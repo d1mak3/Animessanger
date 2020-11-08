@@ -81,7 +81,7 @@ namespace ClientForMessenger
             ++currentID;            
           }
         });
-        await Task.Delay(51);
+        await Task.Delay(5);
       }      
     }
 
