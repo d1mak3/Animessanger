@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Microsoft.AspNetCore.Cors;
+using System.IO;
+
 
 namespace ServerForMessanger.Controllers
 {
@@ -19,6 +21,17 @@ namespace ServerForMessanger.Controllers
     [HttpGet]
     public string GetAllMessages() // Получаем все сообщения
     {
+      // Если в списке нет сообщений пробуем загрузить их из файла
+      if (allMessages.messages.Count == 1)
+      {
+        StreamReader readMessageInFile = new StreamReader("History.txt");
+        string reader;
+        while ((reader = readMessageInFile.ReadLine()) != null)
+        {
+          allMessages.AddMessage(JsonSerializer.Deserialize<Message>(reader));
+        }
+      }      
+
       var messagesFromJson = JsonSerializer.Serialize(allMessages.messages);
       return messagesFromJson.ToString();
     }
@@ -27,6 +40,17 @@ namespace ServerForMessanger.Controllers
     [HttpGet("{id}")] 
     public string GetMessageFromID(int id) // Получаем сообщение по айди
     {
+      // Если в списке нет сообщений пробуем загрузить их из файла
+      if (allMessages.messages.Count == 1)
+      {
+        StreamReader readMessageInFile = new StreamReader("History.txt");
+        string reader;
+        while ((reader = readMessageInFile.ReadLine()) != null)
+        {
+          allMessages.AddMessage(JsonSerializer.Deserialize<Message>(reader));
+        }
+      }
+
       string message = "Message doesnt exist";
       if (id < allMessages.messages.Count && id >= 0)
         message = JsonSerializer.Serialize(allMessages.messages[id]);
@@ -36,7 +60,11 @@ namespace ServerForMessanger.Controllers
     // POST api/messages
     [HttpPost] 
     public void SendMessage(Message _newMessage) // Отправляем сообщение
-    {   
+    {
+      StreamWriter writeMessageInFile = new StreamWriter("History.txt", true);
+      writeMessageInFile.WriteLine(JsonSerializer.Serialize(_newMessage));
+      writeMessageInFile.Close();
+
       allMessages.AddMessage(_newMessage.userName, _newMessage.message);
     }
      
