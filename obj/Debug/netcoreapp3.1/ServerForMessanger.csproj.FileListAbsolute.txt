@@ -30,11 +30,13 @@ C:\Users\ДИМОООООООН\source\repos\Animessanger\bin\Debug\netcoreapp3.
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.csprojAssemblyReference.cache
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.AssemblyInfoInputs.cache
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.AssemblyInfo.cs
-C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.csproj.CoreCompileInputs.cache
-C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.RazorTargetAssemblyInfo.cache
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\staticwebassets\ServerForMessanger.StaticWebAssets.Manifest.cache
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\staticwebassets\ServerForMessanger.StaticWebAssets.xml
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.dll
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.pdb
 C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.genruntimeconfig.cache
+C:\Users\ДИМОООООООН\source\repos\Animessanger\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll
+C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.csproj.CoreCompileInputs.cache
+C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ДИМОООООООН\source\repos\Animessanger\obj\Debug\netcoreapp3.1\ServerForMessanger.csproj.CopyComplete

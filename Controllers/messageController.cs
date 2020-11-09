@@ -10,7 +10,7 @@ using System.IO;
 
 namespace ServerForMessanger.Controllers
 {
-  [EnableCors("CorsApi")] // Так можно ограничить запросы (точнее описано в файле startup.cs), но хз, влияет ли это на безопасность
+  //[EnableCors("CorsApi")] // Так можно ограничить запросы (точнее описано в файле startup.cs), но хз, влияет ли это на безопасность
   [Route("api/[controller]")] // Ссылка на контроллер
   [ApiController]
   public class messageController : Controller
@@ -33,8 +33,8 @@ namespace ServerForMessanger.Controllers
         readMessageInFile.Close();
       }      
 
-      var messagesFromJson = JsonSerializer.Serialize(allMessages.messages);
-      return messagesFromJson.ToString();
+      var messagesToJson = JsonSerializer.Serialize(allMessages.messages);
+      return messagesToJson.ToString();
     }
 
     // GET api/messages/0

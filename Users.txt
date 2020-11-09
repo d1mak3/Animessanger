@@ -1,0 +1,1 @@
+{"login":"dimon","password":"$2a$11$NbLEj6qFJts3ge58KneGAu1gdh7wd9CNcUU0/GMPpiPG4B1rjRMlm","nickName":"dima"}
