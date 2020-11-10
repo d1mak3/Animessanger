@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="310.584" Icon="Resources/senchou.png">
-    <Grid Background="#283673">
+        Title="Login" Height="450" Width="310.584" Icon="Resources/senchou.png" Closed="Window_Closed">
+    <Grid Background="#FF3A55C7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="103*"/>
             <ColumnDefinition Width="200*"/>
@@ -21,8 +21,8 @@
         </Grid.RowDefinitions>
         <Image Grid.Row="1" Source="Resources/Senchou.png" Grid.ColumnSpan="2" />
         <Image Grid.Row="2" Source="Resources/Логотип.png" MaxWidth="275" Grid.ColumnSpan="2"/>
-        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Margin="0,0,0,0.2" Grid.ColumnSpan="2" Text="Login:"/>
-        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Margin="0,47,0,0.4" Grid.RowSpan="2" Text="Pass:"/>
-        <Button Grid.Row="5" Background="Transparent" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Text="Login:" x:Name="loginTextBox" GotFocus="loginTextBox_GotFocus" FontFamily="Calibri" FontStyle="Italic" FontWeight="ExtraLight" LostFocus="loginTextBox_LostFocus"/>
+        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Margin="0,47,0,0" x:Name="passwordTextBox" Grid.RowSpan="2" Text="Pass:" FontFamily="Calibri" TextDecorations="{x:Null}" FontStyle="Italic" LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus"/>
+        <Button Grid.Row="5" Background="#FF5FAFFF" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

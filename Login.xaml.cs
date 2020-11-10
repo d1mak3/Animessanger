@@ -34,5 +34,39 @@ namespace ClientForMessenger
       Owner.Visibility = Visibility.Visible;      
       this.Close();
     }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      if (loginTextBox.Text == String.Empty || loginTextBox.Text == "Login:")
+        Application.Current.Shutdown();
+    }
+
+    private void loginTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+      loginTextBox.Text = String.Empty;
+      loginTextBox.FontWeight = FontWeights.Normal;
+      loginTextBox.FontStyle = FontStyles.Normal;
+    }
+
+    private void loginTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+      loginTextBox.Text = "Login: ";
+      loginTextBox.FontWeight = FontWeights.ExtraLight;
+      loginTextBox.FontStyle = FontStyles.Italic;
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+      passwordTextBox.Text = "Pass: ";
+      passwordTextBox.FontWeight = FontWeights.ExtraLight;
+      passwordTextBox.FontStyle = FontStyles.Italic;      
+    }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+      passwordTextBox.Text = String.Empty;
+      passwordTextBox.FontWeight = FontWeights.Normal;
+      passwordTextBox.FontStyle = FontStyles.Normal;
+    }
   }
 }

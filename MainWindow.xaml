@@ -29,7 +29,7 @@
                 <StackPanel x:Name="MessagePanel" Grid.Row="0" Loaded="MessagePanel_Loaded"></StackPanel>
             </Border>
             <!--Ввод и кнопка отправки-->
-            <TextBox Grid.Row="1" HorizontalAlignment="Left" MinWidth="500" x:Name="TypeTextBox"/>
+            <TextBox Grid.Row="1" HorizontalAlignment="Left" MinWidth="500" x:Name="TypeTextBox" TextWrapping="Wrap"/>
             <Button Grid.Row="1" HorizontalAlignment="Right" MinWidth="80" Content="Send" x:Name="SendButton" Click="SendButton_Click"/>
         </Grid>
     </Grid>

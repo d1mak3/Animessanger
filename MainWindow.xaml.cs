@@ -26,77 +26,52 @@ namespace ClientForMessenger
       InitializeComponent();  
     }    
 
-    private void Main_Loaded_1(object sender, RoutedEventArgs e)
+    private void Main_Loaded_1(object sender, RoutedEventArgs e) // Когда главное окошко загрузилось
     {
       // Создаём окошко с логином
       LoginWindow login = new LoginWindow();
       login.Owner = this;
       this.Visibility = Visibility.Hidden;
-      login.Show();
-
-     
-      ContactsPanel.Children.Add(new TextBlock { Text = "Дима" }); // Пример юзера
-      MessagePanel.Children.Add(new TextBlock { Text = "Дима\nПривет" }); // Пример сообщения     
+      login.Show();           
     }
 
     private void Main_SizeChanged(object sender, SizeChangedEventArgs e) // Меняем ввод и кнопку в зависимости от размеров окошка
     {
       TypeTextBox.Width = this.Width / 1.6;
       SendButton.Width = this.Width / 10;
-    }
+    }    
 
-    /* public async void GetMessages(StackPanel _MessagePanel)
-     {
-       Message get = new Message();
-       int currentID = 0;
-       await Task.Run(() =>
-       {
-         while (true)
-         {
-           operation.GetMessage(out get, currentID++);
-           if (get.message != "Message doesnt exist")
-           {
-             _MessagePanel.Children.Add(new TextBlock { Text = $"{get.userName}\n{get.message}" });
-             ++currentID;
-           }
-         }        
-       });
-     }*/
-
-    public async Task GetMessages()
+    public async Task GetMessages() // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
     {
-      List<Message> get = new List<Message>();
-      int currentID = 0;
+      List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран      
 
-      while (true)
+      while (true) // Приём сообщений работает, пока работает окошко
       {
-        Dispatcher.Invoke(() =>
+        Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
         {
-          operation.GetMessages(out get);          
-          if (get.Count != 0)
+          operation.GetMessages(out get); // Принимаем все сообщения       
+          if (get.Count != 0) // Если сообщений > 0 
           {
-            MessagePanel.Children.Clear();
-            foreach(Message m in get)
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}" });
-            ++currentID;            
+            MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
+            foreach(Message m in get) // Заносим все сообщения в панельку
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}" });                        
           }
         });
-        await Task.Delay(5);
+        await Task.Delay(1);
       }      
     }
 
     private void SendButton_Click(object sender, RoutedEventArgs e) // Отправка сообщений
     {
-      if (TypeTextBox.Text != String.Empty)
+      if (TypeTextBox.Text != String.Empty) // Если TextBox в который мы вводим текст имеет хоть что-то
       {
-        Message newMessage = new Message("Server", TypeTextBox.Text);
-        operation.SendMessage(newMessage);
-        // MessagePanel.Children.Add(new TextBlock { Text = $"{newMessage.userName}" + "\n" + $"{newMessage.message}" });
-        TypeTextBox.Text = String.Empty;
+        Message newMessage = new Message("Server", TypeTextBox.Text); // Создаём новое сообщение с текстом из TextBox
+        operation.SendMessage(newMessage); // Отправляем сообщение     
+        TypeTextBox.Text = String.Empty; // Стираем сообщение из TextBox
       }
     }
 
-    private async void MessagePanel_Loaded(object sender, RoutedEventArgs e)
+    private async void MessagePanel_Loaded(object sender, RoutedEventArgs e) // Вызываем асинхронный приём сообщений при загрузке основного окошечка
     {
       await GetMessages();
     }
