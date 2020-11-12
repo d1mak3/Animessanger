@@ -8,13 +8,13 @@
         Title="Login" Height="450" Width="310.584" Icon="Resources/senchou.png" Closed="Window_Closed">
     <Grid Background="#FF3A55C7">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="103*"/>
-            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="50*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="71*"></RowDefinition>
-            <RowDefinition Height="108*"></RowDefinition>
-            <RowDefinition Height="89*"></RowDefinition>
+            <RowDefinition Height="99*"></RowDefinition>
+            <RowDefinition Height="98*"></RowDefinition>
             <RowDefinition Height="47*"></RowDefinition>
             <RowDefinition Height="47*"></RowDefinition>
             <RowDefinition Height="58*"></RowDefinition>
@@ -22,7 +22,9 @@
         <Image Grid.Row="1" Source="Resources/Senchou.png" Grid.ColumnSpan="2" />
         <Image Grid.Row="2" Source="Resources/Логотип.png" MaxWidth="275" Grid.ColumnSpan="2"/>
         <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Text="Login:" x:Name="loginTextBox" GotFocus="loginTextBox_GotFocus" FontFamily="Calibri" FontStyle="Italic" FontWeight="ExtraLight" LostFocus="loginTextBox_LostFocus"/>
-        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Margin="0,47,0,0" x:Name="passwordTextBox" Grid.RowSpan="2" Text="Pass:" FontFamily="Calibri" TextDecorations="{x:Null}" FontStyle="Italic" LostFocus="TextBox_LostFocus" GotFocus="TextBox_GotFocus"/>
-        <Button Grid.Row="5" Background="#FF5FAFFF" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Grid.ColumnSpan="2"/>
+        <TextBox Grid.Row="4" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" x:Name="passwordTextBox" Text="Pass:" FontFamily="Calibri" FontStyle="Italic" GotFocus="TextBox_GotFocus"/>
+        <PasswordBox Grid.Row="4" Grid.ColumnSpan="2" MaxWidth="310" MaxHeight="47" Visibility="Hidden" Background="Transparent" LostFocus="PasswordBox_LostFocus" x:Name="passwordBox" FontSize="30" />
+        <Button Grid.Row="5" Background="#FF5FAFFF" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+        <Button Grid.Row="5" Grid.Column="1" Background="#FF0D86FF" Content="Sign Up" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click_1" Margin="10,0,0,0" HorizontalAlignment="Left"/>
     </Grid>
 </Window>

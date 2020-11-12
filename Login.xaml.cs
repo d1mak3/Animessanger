@@ -24,6 +24,12 @@ namespace ClientForMessenger
       InitializeComponent();      
     }
 
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      if (loginTextBox.Text == String.Empty || loginTextBox.Text == "Login:")
+        Application.Current.Shutdown();
+    }
+
     private void Button_MouseEnter(object sender, MouseEventArgs e)
     {
       
@@ -35,11 +41,12 @@ namespace ClientForMessenger
       this.Close();
     }
 
-    private void Window_Closed(object sender, EventArgs e)
+    private void Button_Click_1(object sender, RoutedEventArgs e)
     {
-      if (loginTextBox.Text == String.Empty || loginTextBox.Text == "Login:")
-        Application.Current.Shutdown();
-    }
+      Reg openReg = new Reg();
+      openReg.Show();
+      this.Visibility = Visibility.Hidden;
+    }    
 
     private void loginTextBox_GotFocus(object sender, RoutedEventArgs e)
     {
@@ -53,20 +60,23 @@ namespace ClientForMessenger
       loginTextBox.Text = "Login: ";
       loginTextBox.FontWeight = FontWeights.ExtraLight;
       loginTextBox.FontStyle = FontStyles.Italic;
-    }
-
-    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-    {
-      passwordTextBox.Text = "Pass: ";
-      passwordTextBox.FontWeight = FontWeights.ExtraLight;
-      passwordTextBox.FontStyle = FontStyles.Italic;      
-    }
+    }    
 
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
-      passwordTextBox.Text = String.Empty;
-      passwordTextBox.FontWeight = FontWeights.Normal;
-      passwordTextBox.FontStyle = FontStyles.Normal;
+      passwordTextBox.Visibility = Visibility.Hidden;
+      passwordBox.Visibility = Visibility.Visible;
+      passwordBox.Focus();
+    }    
+
+    private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+      if(passwordBox.Password == String.Empty)
+      {
+        passwordBox.Visibility = Visibility.Hidden;
+        passwordTextBox.Visibility = Visibility.Visible;
+      }
     }
+    
   }
 }
