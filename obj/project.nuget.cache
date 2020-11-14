@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eZjgwCtdOt00d7b7s64BcYSFYmb9U1aQD4kz+BL5HLxESlff9dZR/h4F/JvlaqveXoC3f64Dh8kA3wZRIGvnrQ==",
+  "dgSpecHash": "VtqieymTsspfQBr7k8PUv5DFHI9Q3wK/3vgaKoG/AsDAH/KDfHSX1XPgJ7qUvOKvAb6rVpqjl5m3lyEawzavEA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ДИМОООООООН\\source\\repos\\Animessanger\\ServerForMessanger.csproj",
+  "projectFilePath": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\bcrypt.net-next\\4.0.0\\bcrypt.net-next.4.0.0.nupkg.sha512",
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",

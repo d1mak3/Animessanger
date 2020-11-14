@@ -15,50 +15,7 @@ namespace ServerForMessanger.Controllers
   {
     List<User> onlineUsers = new List<User>();
     List<User> offlineUsers = new List<User>();
-    List<User> allUsers = new List<User>();
-
-    // POST api/login
-    [HttpPost]
-    public string Registration(User _newUser) // Регистрируем юзера
-    {
-      if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
-      {
-        StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
-        {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));
-          offlineUsers = allUsers;
-        }
-        readAllUsers.Close();
-      }
-
-      // Проверяем использован ли ник или логин
-      bool checkNameUsed = false;
-      foreach(User u in allUsers)
-      {
-        if (_newUser.login == u.login || _newUser.nickName == u.nickName)
-        {
-          checkNameUsed = true;
-          break;
-        }
-      }
-
-      // Если ник и логин не заняты
-      if (checkNameUsed == false)
-      {
-        // Хешируем пароль
-        if (_newUser.password != null)
-          _newUser.password = BCrypt.Net.BCrypt.HashPassword(_newUser.password);
-
-        StreamWriter writeUserInFile = new StreamWriter("Users.txt", true);
-        writeUserInFile.WriteLine(JsonSerializer.Serialize(_newUser));
-        writeUserInFile.Close();
-        allUsers.Add(_newUser);
-        return "Sucsessful";
-      }
-      return "nickname or login is already used";
-    }
+    public static List<User> allUsers = new List<User>();    
 
     // GET api/login
     [HttpGet]
@@ -79,8 +36,8 @@ namespace ServerForMessanger.Controllers
       return JsonSerializer.Serialize(allUsers).ToString(); // Возвращаем сериализованный список юзеров
     }    
 
-    // POST api/login/check
-    [HttpPost("{check}")]
+    // POST api/login
+    [HttpPost]
     public bool CheckPass(User _userForCheck) // Проверка пароля
     {
       if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
