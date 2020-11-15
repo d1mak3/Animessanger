@@ -18,21 +18,20 @@ namespace ClientForMessenger
 {  
   public partial class MainWindow : Window
   {
-    MessagesOperationHandler operation = new MessagesOperationHandler();
-
+    MessagesOperationHandler operation = new MessagesOperationHandler();    
 
     public MainWindow()
     {
-      InitializeComponent();  
+      InitializeComponent();      
     }    
 
     private void Main_Loaded_1(object sender, RoutedEventArgs e) // Когда главное окошко загрузилось
     {
-      // Создаём окошко с логином
-      LoginWindow login = new LoginWindow();
-      login.Owner = this;
       this.Visibility = Visibility.Hidden;
-      login.Show();           
+      // Создаём окошко с логином  
+      LoginWindow login = new LoginWindow();
+      login.Show();
+      login.Owner = this;      
     }
 
     private void Main_SizeChanged(object sender, SizeChangedEventArgs e) // Меняем ввод и кнопку в зависимости от размеров окошка

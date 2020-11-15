@@ -21,10 +21,10 @@
         </Grid.RowDefinitions>
         <Image Grid.Row="1" Source="Resources/Senchou.png" Grid.ColumnSpan="2" />
         <Image Grid.Row="2" Source="Resources/Логотип.png" MaxWidth="275" Grid.ColumnSpan="2"/>
-        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Text="Login:" x:Name="loginTextBox" GotFocus="loginTextBox_GotFocus" FontFamily="Calibri" FontStyle="Italic" FontWeight="ExtraLight" LostFocus="loginTextBox_LostFocus"/>
-        <TextBox Grid.Row="4" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" x:Name="passwordTextBox" Text="Pass:" FontFamily="Calibri" FontStyle="Italic" GotFocus="TextBox_GotFocus"/>
+        <TextBox Grid.Row="3" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" Text="Login: " x:Name="loginTextBox" GotFocus="loginTextBox_GotFocus" FontFamily="Calibri" FontStyle="Italic" FontWeight="ExtraLight" LostFocus="loginTextBox_LostFocus"/>
+        <TextBox Grid.Row="4" Background="Transparent" MaxWidth="310" MaxHeight="47" FontSize="30" Grid.ColumnSpan="2" x:Name="passwordTextBox" Text="Pass: " FontFamily="Calibri" FontStyle="Italic" GotFocus="TextBox_GotFocus"/>
         <PasswordBox Grid.Row="4" Grid.ColumnSpan="2" MaxWidth="310" MaxHeight="47" Visibility="Hidden" Background="Transparent" LostFocus="PasswordBox_LostFocus" x:Name="passwordBox" FontSize="30" />
-        <Button Grid.Row="5" Background="#FF5FAFFF" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click" Margin="0,0,10,0" HorizontalAlignment="Right"/>
-        <Button Grid.Row="5" Grid.Column="1" Background="#FF0D86FF" Content="Sign Up" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" MouseEnter="Button_MouseEnter" Click="Button_Click_1" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+        <Button Grid.Row="5" Background="#FF5FAFFF" Content="Sign In" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" Click="Button_Click" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+        <Button Grid.Row="5" Grid.Column="1" Background="#FF0D86FF" Content="Sign Up" FontSize="34" MaxWidth="300" MaxHeight="57" Focusable="False" Click="Button_Click_1" Margin="10,0,0,0" HorizontalAlignment="Left"/>
     </Grid>
 </Window>
