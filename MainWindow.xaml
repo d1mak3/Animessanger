@@ -5,19 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
-        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" Icon="Resources/senchou.png" SizeChanged="Main_SizeChanged">
+        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" Icon="Resources/senchou.png" SizeChanged="Main_SizeChanged" Closed="Main_Closed">
 
-    <Grid x:Name="MainContainer" >
+    <Grid x:Name="MainContainer">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="205*"></ColumnDefinition>
-            <ColumnDefinition Width="587*"></ColumnDefinition>
+            <ColumnDefinition Width="100*"></ColumnDefinition>
+            <ColumnDefinition Width="555*"></ColumnDefinition>
+            <ColumnDefinition Width="100*" />
         </Grid.ColumnDefinitions>
-
-        <!--Контакты-->
-        <Border BorderBrush="Gray" BorderThickness="1" Margin="-1, -1, -1, -1">
-            <StackPanel x:Name="ContactsPanel" Grid.Column="0"></StackPanel>
-        </Border>
-        <Border BorderBrush="Gray" BorderThickness="1" Grid.Row="1"/>
         <!--Сообщения-->
         <!--Список сообщений-->
         <Grid Grid.Column="1">

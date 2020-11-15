@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Newtonsoft.Json.Linq;
+using System.IO;
+
 
 namespace ClientForMessenger
 {
@@ -40,6 +43,55 @@ namespace ClientForMessenger
         // Обрабатываем ответ
         if (response != "There is no account with this login" && response != "Wrong login or password") // Если пришёл ник, открываем основное окно
         {
+          user.nickname = response; // Записываем ник, который пришел, в юзера
+          
+          // Добавляем юзера в config.json
+          if (File.Exists("config.json")) // Если конфиг уже создан
+          {
+            try
+            {
+              string json = String.Empty;
+              
+              // Записываем новые данные в поля в config.json
+              using (var readjson = new StreamReader("config.json"))
+              {
+                json = readjson.ReadToEnd();
+              }
+
+              var jsonobject = JObject.Parse(json);
+              jsonobject["nickname"] = user.nickname;
+              jsonobject["login"] = user.login;
+              jsonobject["password"] = user.password;
+
+              using (var writejson = new StreamWriter("config.json"))
+              {
+                writejson.Write(jsonobject.ToString());
+              }
+            }
+            // Если не удалось открыть config.json выходим из приложения
+            catch
+            {
+              MessageBox.Show("config.json is already opened");
+              Application.Current.Shutdown();
+            }
+            
+          }
+          else // Если config.json не создан
+          {
+            var jsonobject = new JObject();
+
+            jsonobject.Add("nickname", user.nickname);
+            jsonobject.Add("login", user.login);
+            jsonobject.Add("password", user.password);
+            jsonobject.Add("width", 0);
+            jsonobject.Add("height", 0);
+
+            using (var writejson = new StreamWriter("config.json"))
+            {
+              writejson.Write(jsonobject.ToString());
+            }
+          }
+
           Owner.Visibility = Visibility.Visible;
           this.Close();
         }
@@ -60,9 +112,7 @@ namespace ClientForMessenger
       openReg.Show();
       this.Visibility = Visibility.Hidden;
     }    
-
-
-    // Убираем текст 
+            
     private void loginTextBox_GotFocus(object sender, RoutedEventArgs e)
     {
       if (loginTextBox.Text == "Login: ")

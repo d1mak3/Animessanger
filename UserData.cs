@@ -47,10 +47,12 @@ namespace ClientForMessenger
 
       // Получаем ответ
       string result;
-      var httpResponse = (HttpWebResponse)logRequest.GetResponse();
-      using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+      using (var httpResponse = (HttpWebResponse)logRequest.GetResponse())
       {
-        result = streamReader.ReadToEnd();
+        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        {
+          result = streamReader.ReadToEnd();
+        }
       }
 
       return result;

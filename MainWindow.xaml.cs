@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace ClientForMessenger
 {  
@@ -22,7 +24,21 @@ namespace ClientForMessenger
 
     public MainWindow()
     {
-      InitializeComponent();      
+      InitializeComponent();
+
+      // Достаём размеры формы из файла config.json (если они там есть)
+      var jsonobject = new JObject();
+
+      using (var readjson = new StreamReader("config.json"))
+      {
+        jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
+      }
+
+      if ((double)jsonobject["width"] != 0 && (double)jsonobject["height"] != 0)
+      {
+        this.Width = (double)jsonobject["width"];
+        this.Height = (double)jsonobject["height"];
+      }
     }    
 
     private void Main_Loaded_1(object sender, RoutedEventArgs e) // Когда главное окошко загрузилось
@@ -73,6 +89,25 @@ namespace ClientForMessenger
     private async void MessagePanel_Loaded(object sender, RoutedEventArgs e) // Вызываем асинхронный приём сообщений при загрузке основного окошечка
     {
       await GetMessages();
+    }
+
+    private void Main_Closed(object sender, EventArgs e) 
+    {
+      // Записываем размеры окна в config.json
+      var jsonobject = new JObject();
+
+      using (var readjson = new StreamReader("config.json"))
+      {
+        jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
+      }
+
+      jsonobject["width"] = this.Width;
+      jsonobject["height"] = this.Height;
+
+      using (var writejson = new StreamWriter("config.json"))
+      {
+        writejson.Write(jsonobject.ToString());
+      }
     }
   }
 }
