@@ -36,7 +36,7 @@ namespace ClientForMessenger
 
     }
 
-    public void SendMessage(Message _message) // Отправляем сообщение заданное объектом
+    public bool SendMessage(Message _message) // Отправляем сообщение заданное объектом
     {
       StringWriter Jsonwriter = new StringWriter(); // Сюда записываем результат сериализации
 
@@ -55,11 +55,19 @@ namespace ClientForMessenger
         streamWriter.Write(Jsonwriter);
       }
 
-      // Получаем ответ
+      // Получаем ответ (и проверяем запрос на админку)
       var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
       using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
       {
         var result = streamReader.ReadToEnd();
+        if (Convert.ToBoolean(result) == true)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
 

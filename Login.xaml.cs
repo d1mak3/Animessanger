@@ -37,67 +37,77 @@ namespace ClientForMessenger
     {
       if (loginTextBox.Text != String.Empty && passwordBox.Password != String.Empty) // Если поля заполнены
       {
-        UserData user = new UserData("null", loginTextBox.Text, passwordBox.Password); // Заполняем юзера для проверки
-        string response = user.LoginCheck(); // Записываем ответ проверки
-
-        // Обрабатываем ответ
-        if (response != "There is no account with this login" && response != "Wrong login or password") // Если пришёл ник, открываем основное окно
+        if (loginTextBox.Text.IndexOf("%") != -1)
         {
-          user.nickname = response; // Записываем ник, который пришел, в юзера
-          
-          // Добавляем юзера в config.json
-          if (File.Exists("config.json")) // Если конфиг уже создан
+          MessageBox.Show("Логин не должен содержать знак %");
+          loginTextBox.Text = String.Empty;
+        }
+        else
+        {
+          UserData user = new UserData("null", loginTextBox.Text, passwordBox.Password); // Заполняем юзера для проверки
+          string response = user.LoginCheck(); // Записываем ответ проверки
+
+          // Обрабатываем ответ
+          if (response != "There is no account with this login" && response != "Wrong login or password") // Если пришёл ник, открываем основное окно
           {
-            try
+            user.nickname = response; // Записываем ник, который пришел, в юзера
+
+            // Добавляем юзера в config.json
+            if (File.Exists("config.json")) // Если конфиг уже создан
             {
-              string json = String.Empty;
-              
-              // Записываем новые данные в поля в config.json
-              using (var readjson = new StreamReader("config.json"))
+              try
               {
-                json = readjson.ReadToEnd();
+                string json = String.Empty;
+
+                // Записываем новые данные в поля в config.json
+                using (var readjson = new StreamReader("config.json"))
+                {
+                  json = readjson.ReadToEnd();
+                }
+
+                var jsonobject = JObject.Parse(json);
+                jsonobject["nickname"] = user.nickname;
+                jsonobject["login"] = user.login;
+                jsonobject["password"] = user.password;
+
+                using (var writejson = new StreamWriter("config.json"))
+                {
+                  writejson.Write(jsonobject.ToString());
+                }
+              }
+              // Если не удалось открыть config.json выходим из приложения
+              catch
+              {
+                MessageBox.Show("config.json is already opened");
+                Application.Current.Shutdown();
               }
 
-              var jsonobject = JObject.Parse(json);
-              jsonobject["nickname"] = user.nickname;
-              jsonobject["login"] = user.login;
-              jsonobject["password"] = user.password;
+            }
+            else // Если config.json не создан
+            {
+              var jsonobject = new JObject();
+
+              jsonobject.Add("nickname", user.nickname);
+              jsonobject.Add("login", user.login);
+              jsonobject.Add("password", user.password);
+              jsonobject.Add("width", 0);
+              jsonobject.Add("height", 0);
+              jsonobject.Add("isAdmin", false);
+              jsonobject.Add("autologin", false);
 
               using (var writejson = new StreamWriter("config.json"))
               {
                 writejson.Write(jsonobject.ToString());
               }
             }
-            // Если не удалось открыть config.json выходим из приложения
-            catch
-            {
-              MessageBox.Show("config.json is already opened");
-              Application.Current.Shutdown();
-            }
-            
+
+            Owner.Visibility = Visibility.Visible;
+            this.Close();
           }
-          else // Если config.json не создан
+          else // Если пришёл не ник, выводим то, что пришло
           {
-            var jsonobject = new JObject();
-
-            jsonobject.Add("nickname", user.nickname);
-            jsonobject.Add("login", user.login);
-            jsonobject.Add("password", user.password);
-            jsonobject.Add("width", 0);
-            jsonobject.Add("height", 0);
-
-            using (var writejson = new StreamWriter("config.json"))
-            {
-              writejson.Write(jsonobject.ToString());
-            }
+            MessageBox.Show(response);
           }
-
-          Owner.Visibility = Visibility.Visible;
-          this.Close();
-        }
-        else // Если пришёл не ник, выводим то, что пришло
-        {
-          MessageBox.Show(response);
         }
       }
 
