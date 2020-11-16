@@ -32,12 +32,7 @@ namespace ClientForMessenger
       using (var readjson = new StreamReader("config.json"))
       {
         jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-      }
-
-      if ((bool)jsonobject["isAdmin"] == true)
-      {
-        Admin.Visibility = Visibility.Visible;
-      }
+      }      
 
       if ((double)jsonobject["width"] != 0 && (double)jsonobject["height"] != 0)
       {
@@ -76,28 +71,27 @@ namespace ClientForMessenger
     }    
 
     public async Task GetMessages() // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
-    {
-      // Достаём ник
-      var jsonobject = new JObject();
-
-      using (var readjson = new StreamReader("config.json"))
-      {
-        jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-      }
-              
-      List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран      
-      string nick4check = (string)jsonobject["nickname"]; // Ник для проверки изменения ника (если зайти с другого аккаунта)
-
+    {   
+      List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран     
+            
       while (true) // Приём сообщений работает, пока работает окошко
       {
+        // Достаём ник
+        var jsonobject = new JObject();
+
+        using (var readjson = new StreamReader("config.json"))
+        {
+          jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
+        }
+
         string nick = (string)jsonobject["nickname"];
+        
+
         Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
         {
           operation.GetMessages(out get); // Принимаем все сообщения       
-          if (get.Count != 0 || nick != nick4check) // Если сообщений > 0 
-          {
-            nick4check = nick;
-
+          if (get.Count != 0) // Если сообщений > 0 
+          {            
             MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
             foreach(Message m in get) // Заносим все сообщения в панельку
             {     
@@ -152,6 +146,10 @@ namespace ClientForMessenger
           MessageBox.Show("Admin mode: OFF");
           jsonobject["isAdmin"] = false;
           Admin.Visibility = Visibility.Hidden;
+          using (var jsonwriter = new StreamWriter("config.json"))
+          {
+            jsonwriter.Write(jsonobject.ToString());
+          }
         }
       }
 
@@ -202,6 +200,12 @@ namespace ClientForMessenger
       this.Visibility = Visibility.Hidden;
       jsonobject["autologin"] = false;
       jsonobject["isAdmin"] = false;
+
+      using (var writejson = new StreamWriter("config.json"))
+      {
+        writejson.Write(jsonobject.ToString());
+      }
+
       LoginWindow login = new LoginWindow();
       login.Owner = this;
       login.Show();
@@ -212,7 +216,25 @@ namespace ClientForMessenger
       if (this.Visibility == Visibility.Hidden)
       {
         MessagePanel.IsEnabled = false;
-      }      
+      }
+      else
+      {
+        var jsonobject = new JObject();
+
+        using (var jsonreader = new StreamReader("config.json"))
+        {
+          jsonobject = JObject.Parse(jsonreader.ReadToEnd());
+        }
+
+        if ((bool)jsonobject["isAdmin"] == true)
+        {
+          Admin.Visibility = Visibility.Visible;
+        }
+        else
+        {
+          Admin.Visibility = Visibility.Hidden;
+        }
+      }
     }
   }
 }

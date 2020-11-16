@@ -38,6 +38,8 @@ namespace ClientForMessenger
       {
         checkAutoLog.IsChecked = true;
       }
+
+      InfoBlock.Text += $"\nUsername: {(string)jsonobject["nickname"]}\nLogin: {(string)jsonobject["login"]}";
     }
 
 

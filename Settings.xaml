@@ -8,22 +8,24 @@
         Title="Settings" Height="450" Width="443.613" ResizeMode="NoResize" WindowStyle="ToolWindow" SizeChanged="Window_SizeChanged" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="49*"></RowDefinition>
-            <RowDefinition Height="49*"></RowDefinition>
-            <RowDefinition Height="49*"></RowDefinition>
-            <RowDefinition Height="329*"></RowDefinition>
-            <RowDefinition Height="49*"></RowDefinition>
+            <RowDefinition Height="120*"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="200*"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="30">
+        <TextBlock x:Name="InfoBlock" Grid.Row="0" Text="You are now logged as: " FontSize="20" HorizontalAlignment="Center" TextWrapping="NoWrap" Background="LightBlue" FontWeight="ExtraLight" FontStyle="Italic"/>
+        <TextBlock FontSize="30" Grid.Row="1">
             <Run Text="Autologin"/>
             <InlineUIContainer>
                 <CheckBox x:Name="checkAutoLog" HorizontalAlignment="Center" VerticalAlignment="Top" Checked="checkAutoLog_Checked" Unchecked="checkAutoLog_Unchecked"  MinHeight="20" MinWidth="20" RenderTransformOrigin="-2.553,0.549" Height="14" Width="15" FontSize="20"/>
             </InlineUIContainer>
         </TextBlock>
-        <TextBlock Grid.Row="1" Text="Width:" FontSize="30"/>
-        <TextBox Grid.Row="1" x:Name="WidthBlock" FontSize="30" Margin="139,0,171,0" KeyDown="WidthBlock_KeyDown"/>
-        <TextBlock Grid.Row="2" Text="Height:" FontSize="30"/>
-        <TextBox Grid.Row="2" x:Name="HeightBlock" FontSize="30" Margin="139,0,171,0" KeyDown="HeightBlock_KeyDown"/>
-        <Button Grid.Row="4" HorizontalAlignment="Center" FontSize="30" Content="OK" Margin="163,0,171,0" Width="104" Click="Button_Click" Background="LightGray"/>
+        <TextBlock Grid.Row="2" Text="Width:" FontSize="30"/>
+        <TextBox Grid.Row="2" x:Name="WidthBlock" FontSize="30" Margin="139,0,171,0" KeyDown="WidthBlock_KeyDown"/>
+        <TextBlock Grid.Row="3" Text="Height:" FontSize="30"/>
+        <TextBox Grid.Row="3" x:Name="HeightBlock" FontSize="30" Margin="139,0,171,0" KeyDown="HeightBlock_KeyDown"/>
+        <Button Grid.Row="5" HorizontalAlignment="Center" FontSize="30" Content="OK" Margin="163,0,171,0" Width="104" Click="Button_Click" Background="LightGray"/>
     </Grid>
 </Window>
