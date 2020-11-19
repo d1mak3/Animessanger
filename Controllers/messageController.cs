@@ -17,6 +17,7 @@ namespace ServerForMessanger.Controllers
   {
     private static MessagesHandler allMessages = new MessagesHandler();
 
+
     // GET api/messages
     [HttpGet]
     public string GetAllMessages() // Получаем все сообщения
@@ -61,13 +62,39 @@ namespace ServerForMessanger.Controllers
 
     // POST api/messages
     [HttpPost] 
-    public void SendMessage(Message _newMessage) // Отправляем сообщение
-    {
+    public bool SendMessage(Message _newMessage) // Отправляем сообщение
+    {      
+      // Если юзер пытается активировать админку, проверяем, есть ли он в списке админов
+      if(_newMessage.message == "/admin")
+      {
+        if (System.IO.File.Exists("admins.txt") == false)
+        {
+          System.IO.File.Create("admins.txt");
+          return false;
+        }
+        else
+        {
+          bool checkAdmin = false;
+
+          using (var readadmins = new StreamReader("admins.txt"))
+          {
+            string read = readadmins.ReadToEnd();
+
+            if (read.IndexOf($"%{_newMessage.userName}%") != -1) // Если нашли %Ник%, то возвращаем true
+            {
+              checkAdmin = true;
+            }            
+          }
+          return checkAdmin;
+        }
+      }
+      
       StreamWriter writeMessageInFile = new StreamWriter("History.txt", true);
       writeMessageInFile.WriteLine(JsonSerializer.Serialize(_newMessage));
       writeMessageInFile.Close();
 
       allMessages.AddMessage(_newMessage.userName, _newMessage.message);
+      return false;
     }
 
     // DELETE api/messages
@@ -83,7 +110,7 @@ namespace ServerForMessanger.Controllers
 
     // DELETE api/messages/1
     [HttpDelete("{id}")]
-    public void DelteElement(int id)
+    public string DeleteElement(int id)
     {
       if (id < allMessages.messages.Count && id >= 0)
       {
@@ -95,6 +122,11 @@ namespace ServerForMessanger.Controllers
           writeMessageInFile.WriteLine(JsonSerializer.Serialize(m));
         }
         writeMessageInFile.Close();
+        return "Sucсessful";
+      }
+      else
+      {
+        return "There is no message here";
       }
     }
   }

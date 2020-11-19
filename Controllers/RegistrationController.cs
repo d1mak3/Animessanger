@@ -52,7 +52,7 @@ namespace ServerForMessanger.Controllers
         writeUserInFile.WriteLine(JsonSerializer.Serialize(_newUser));
         writeUserInFile.Close();
         LoginController.allUsers.Add(_newUser);
-        return "Sucsessful";
+        return "Sucсessful";
       }
       return "nickname or login is already used";
     }

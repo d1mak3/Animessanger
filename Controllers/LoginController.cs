@@ -13,57 +13,74 @@ namespace ServerForMessanger.Controllers
   [ApiController]
   public class LoginController : Controller
   {
-    List<User> onlineUsers = new List<User>();
-    List<User> offlineUsers = new List<User>();
-    public static List<User> allUsers = new List<User>();    
+    static List<User> onlineUsers = new List<User>();
+    static List<User> offlineUsers = new List<User>();
+    static List<User> bannedUsers = new List<User>();
+    public static List<User> allUsers = new List<User>();
+
+    private static void Fill(List<User> _users) // Метод, с помощью которого мы записываем данные из файлов в оперативную память
+    {
+      if (_users.Count == 0 && _users == allUsers) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
+      {
+        StreamReader readAllUsers = new StreamReader("Users.txt");
+        string reader;
+        while ((reader = readAllUsers.ReadLine()) != null)
+        {
+          allUsers.Add(JsonSerializer.Deserialize<User>(reader));
+          offlineUsers = allUsers;
+        }
+        readAllUsers.Close();
+      }
+      else if (_users.Count == 0 && _users == bannedUsers) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
+      {
+        StreamReader readAllUsers = new StreamReader("Banlist.txt");
+        string reader;
+        while ((reader = readAllUsers.ReadLine()) != null)
+        {
+          bannedUsers.Add(JsonSerializer.Deserialize<User>(reader));          
+        }
+        readAllUsers.Close();
+      }
+    }
 
     // GET api/login
     [HttpGet]
     public string GetAllUsers() // Возвращаем всех юзеров
     {
-      if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
-      {
-        StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
-        {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));
-          offlineUsers = allUsers;
-        }
-        readAllUsers.Close();
-      }
+      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
 
       return JsonSerializer.Serialize(allUsers).ToString(); // Возвращаем сериализованный список юзеров
-    }    
+    }
 
     // POST api/login
     [HttpPost]
-    public bool CheckPass(User _userForCheck) // Проверка пароля
+    public string CheckPass(User _userForCheck) // Проверка пароля
     {
-      if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
+      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
+      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
+
+      // Проверяем, есть ли юзер в банлисте
+      foreach(User u in bannedUsers)
       {
-        StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
+        if (u.login == _userForCheck.login)
         {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));
-          offlineUsers = allUsers;
+          return "You are banned";
         }
-        readAllUsers.Close();
       }
 
       // Ищем юзера с таким же логином
       User temp = new User();
-      foreach(User u in allUsers)
+      foreach (User u in allUsers)
       {
         if (u.login == _userForCheck.login)
         {
+          _userForCheck.nickName = u.nickName;
           temp = u;
           break;
         }
       }
       if (temp.password == null) // Если не нашли
-        return false;
+        return "There is no account with this login";
 
       // Проверяем пароль
       if (BCrypt.Net.BCrypt.Verify(_userForCheck.password, temp.password) == true)
@@ -77,11 +94,65 @@ namespace ServerForMessanger.Controllers
         if (checkForOnline == false)
           onlineUsers.Add(_userForCheck);
 
-        return true;
+        return _userForCheck.nickName;
       }
       else
-        return false;
+        return "Wrong login or password";
     }
 
+    // DELETE api/login/nickname
+    [HttpDelete("{nickname}")]
+    public string BanUser(string nickname)
+    {
+      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
+      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
+
+      foreach (User u in allUsers)
+      {
+        if (u.nickName == nickname)
+        {
+          using (StreamWriter writejson = new StreamWriter("Banlist.txt"))
+          {
+            bannedUsers.Add(u);
+            writejson.Write(JsonSerializer.Serialize(bannedUsers));
+          }
+          using (StreamWriter writejson = new StreamWriter("Users.txt"))
+          {
+            allUsers.Remove(u);
+            writejson.Write(JsonSerializer.Serialize(allUsers));
+          }
+          return "Successful";
+        }
+      }
+
+      return "There is no user with this nickname";
+    }
+
+    // POST api/login/nickname
+    [HttpPost("{nickname}")]
+    public string UnbanUser(string nickname)
+    {
+      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
+      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
+
+      foreach (User u in bannedUsers)
+      {
+        if (u.nickName == nickname)
+        {
+          using (StreamWriter writejson = new StreamWriter("Users.txt"))
+          {
+            allUsers.Add(u);
+            writejson.Write(JsonSerializer.Serialize(allUsers));
+          }
+          using (StreamWriter writejson = new StreamWriter("Banlist.txt"))
+          {
+            bannedUsers.Remove(u);
+            writejson.Write(JsonSerializer.Serialize(bannedUsers));
+          }
+          return "Successful";
+        }        
+      }
+      return "There are no users with this nick in banlist";
+    }
   }
 }
