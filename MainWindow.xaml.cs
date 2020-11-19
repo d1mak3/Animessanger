@@ -90,21 +90,19 @@ namespace ClientForMessenger
         Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
         {
           operation.GetMessages(out get); // Принимаем все сообщения       
-          if (get.Count != 0) // Если сообщений > 0 
-          {            
-            MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
-            foreach(Message m in get) // Заносим все сообщения в панельку
-            {     
-              if (m.userName == nick)
-              {
-                m.userName = "You";
-                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right });
-              }
-              else
-              {
-                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left });
-              }
-            }                   
+                    
+          MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
+          foreach(Message m in get) // Заносим все сообщения в панельку
+          {     
+            if (m.userName == nick)
+            {
+              m.userName = "You";
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right });
+            }
+            else
+            {
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left });
+            }                             
           }
         });
         await Task.Delay(1);
@@ -235,6 +233,12 @@ namespace ClientForMessenger
           Admin.Visibility = Visibility.Hidden;
         }
       }
+    }
+
+    private void Admin_Click(object sender, RoutedEventArgs e)
+    {
+      AdminConsole console = new AdminConsole();
+      console.Show();
     }
   }
 }

@@ -38,7 +38,7 @@
         <!--Доп функции-->
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button x:Name="Settings" HorizontalAlignment="Right" MinWidth="100" Content="Settings" Background="#FFAFDEFF" Click="Settings_Click"></Button>
-            <Button x:Name="Admin" HorizontalAlignment="Right" MinWidth="100" Content="Admin" Background="#FFAFDEFF" Visibility="Hidden"></Button>                        
+            <Button x:Name="Admin" HorizontalAlignment="Right" MinWidth="100" Content="Admin" Background="#FFAFDEFF" Visibility="Hidden" Click="Admin_Click"></Button>                        
         </StackPanel>
         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="Logout" Content="Log out" MinWidth="100" Background="#FFAFDEFF" Click="Logout_Click"/>

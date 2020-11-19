@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
-        Title="AdminConsole" Height="450" Width="727.737" WindowStyle="ToolWindow">
-    <Grid>
-        
+        Title="AdminConsole" Height="450" Width="499.452" WindowStyle="ToolWindow" Background="Transparent">
+    <Grid >
+        <Border Background="Black" Opacity="0.6"></Border>
+        <StackPanel x:Name="consolePanel" KeyDown="mainconsole_KeyDown">
+            <TextBox x:Name="mainconsole" FontSize="15" Background="Transparent" Foreground="LightSkyBlue"  CaretBrush="White" KeyDown="mainconsole_KeyDown"/>
+            <TextBlock x:Name="responseBlock" FontSize="15" Background="Transparent" Foreground="LightSkyBlue" TextWrapping="Wrap"/>
+        </StackPanel>        
     </Grid>
 </Window>
