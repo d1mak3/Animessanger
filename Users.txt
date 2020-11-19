@@ -1,1 +1,1 @@
-[{"login":"d1makun","password":"$2a$11$mTEhI4Wfv7/1AyM5D3D1a.uOtl10DKNbmsqjPQ2wdzBVzdb4B5xYO","nickName":"d1mak3"},{"login":"Admin","password":"$2a$11$DnXBquzPvxLaEoogKCit7u2v8mutpjtqyk6nCgL5r2A8NB1B/AJgm","nickName":"Test"}]
+[{"login":"d1makun","password":"$2a$11$mTEhI4Wfv7/1AyM5D3D1a.uOtl10DKNbmsqjPQ2wdzBVzdb4B5xYO","nickName":"d1mak3"}]

@@ -23,22 +23,20 @@ namespace ServerForMessanger.Controllers
       if (_users.Count == 0 && _users == allUsers) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
       {
         StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
-        {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));
-          offlineUsers = allUsers;
-        }
+        string reader = readAllUsers.ReadLine();        
+
+        allUsers = JsonSerializer.Deserialize<List<User>>(reader);
+        offlineUsers = allUsers;
+
         readAllUsers.Close();
       }
-      else if (_users.Count == 0 && _users == bannedUsers) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
+      else if (_users.Count == 0 && _users == bannedUsers) // Если в bannedUsers ничего нет, то пробуем добавить туда юзеров из файла
       {
         StreamReader readAllUsers = new StreamReader("Banlist.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
-        {
-          bannedUsers.Add(JsonSerializer.Deserialize<User>(reader));          
-        }
+        string reader = readAllUsers.ReadLine();
+
+        bannedUsers = JsonSerializer.Deserialize<List<User>>(reader);
+
         readAllUsers.Close();
       }
     }

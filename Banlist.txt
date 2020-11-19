@@ -1,1 +1,1 @@
-[]
+[{"login":"Admin","password":"$2a$11$DnXBquzPvxLaEoogKCit7u2v8mutpjtqyk6nCgL5r2A8NB1B/AJgm","nickName":"Test"}]
