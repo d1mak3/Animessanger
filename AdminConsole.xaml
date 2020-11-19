@@ -11,6 +11,6 @@
         <StackPanel x:Name="consolePanel" KeyDown="mainconsole_KeyDown">
             <TextBox x:Name="mainconsole" FontSize="15" Background="Transparent" Foreground="LightSkyBlue"  CaretBrush="White" KeyDown="mainconsole_KeyDown"/>
             <TextBlock x:Name="responseBlock" FontSize="15" Background="Transparent" Foreground="LightSkyBlue" TextWrapping="Wrap"/>
-        </StackPanel>        
+        </StackPanel>
     </Grid>
 </Window>

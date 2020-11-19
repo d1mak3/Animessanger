@@ -25,7 +25,7 @@ namespace ClientForMessenger
     public AdminConsole()
     {
       InitializeComponent();
-      mainconsole.Focus();      
+      mainconsole.Focus();
     }
 
     private void mainconsole_KeyDown(object sender, KeyEventArgs e)
@@ -74,7 +74,7 @@ namespace ClientForMessenger
           mainconsole.Text = String.Empty; // Убираем сообщение после того, как сохранили ввод
 
           if (request.Length == 2) // Первая проверка на правильность введённых данных
-          { 
+          {
             var banRequest = (HttpWebRequest)WebRequest.Create("http://localhost:5000/api/login/" + $"{request[1]}"); // В request[1] хранится строка с ником
             banRequest.Method = "DELETE";
 
@@ -85,7 +85,7 @@ namespace ClientForMessenger
               {
                 responseBlock.Text = reader.ReadToEnd();
               }
-            } 
+            }
           }
           else
           {
@@ -121,9 +121,9 @@ namespace ClientForMessenger
 
         else if (mainconsole.Text == "HELP") // При вводе HELP будем выводить все команды
         {
-          responseBlock.Text = "DELETE ID\nBAN NICKNAME\nUNBAN NICKNAME"; 
+          responseBlock.Text = "DELETE ID\nBAN NICKNAME\nUNBAN NICKNAME";
         }
-      }      
+      }
     }
   }
 }
