@@ -47,6 +47,13 @@ namespace ClientForMessenger
           UserData user = new UserData("null", loginTextBox.Text, passwordBox.Password); // Заполняем юзера для проверки
           string response = user.LoginCheck(); // Записываем ответ проверки
 
+          if (response == "You are banned")
+          {
+            MessageBox.Show("You are banned");
+            loginTextBox.Text = String.Empty;
+            passwordBox.Password = String.Empty;
+          }
+
           // Обрабатываем ответ
           if (response != "There is no account with this login" && response != "Wrong login or password") // Если пришёл ник, открываем основное окно
           {
@@ -90,8 +97,8 @@ namespace ClientForMessenger
               jsonobject.Add("nickname", user.nickname);
               jsonobject.Add("login", user.login);
               jsonobject.Add("password", user.password);
-              jsonobject.Add("width", 0);
-              jsonobject.Add("height", 0);
+              jsonobject.Add("width", 500);
+              jsonobject.Add("height", 500);
               jsonobject.Add("isAdmin", false);
               jsonobject.Add("autologin", false);
 
@@ -100,9 +107,11 @@ namespace ClientForMessenger
                 writejson.Write(jsonobject.ToString());
               }
             }
-
-            Owner.Visibility = Visibility.Visible;
-            this.Close();
+            if (response != "You are banned")
+            {
+              Owner.Visibility = Visibility.Visible;
+              this.Close();
+            }
           }
           else // Если пришёл не ник, выводим то, что пришло
           {

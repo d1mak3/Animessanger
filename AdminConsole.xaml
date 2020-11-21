@@ -8,8 +8,8 @@
         Title="AdminConsole" Height="450" Width="499.452" WindowStyle="ToolWindow" Background="Transparent">
     <Grid >
         <Border Background="Black" Opacity="0.6"></Border>
-        <StackPanel x:Name="consolePanel" KeyDown="mainconsole_KeyDown">
-            <TextBox x:Name="mainconsole" FontSize="15" Background="Transparent" Foreground="LightSkyBlue"  CaretBrush="White" KeyDown="mainconsole_KeyDown"/>
+        <StackPanel x:Name="consolePanel">
+            <TextBox x:Name="mainconsole" FontSize="15" Background="Transparent" Foreground="LightSkyBlue"  CaretBrush="White" KeyUp="mainconsole_KeyUp"/>
             <TextBlock x:Name="responseBlock" FontSize="15" Background="Transparent" Foreground="LightSkyBlue" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>

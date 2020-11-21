@@ -20,24 +20,50 @@ namespace ClientForMessenger
 {  
   public partial class MainWindow : Window
   {
-    MessagesOperationHandler operation = new MessagesOperationHandler();    
+    MessagesOperationHandler operation = new MessagesOperationHandler();
+    bool IsFullWindowed = false;
 
     public MainWindow()
     {
-      InitializeComponent();
+      InitializeComponent();      
+      TypeTextBox.Width = this.Width / 1.6;
+      SendButton.Width = this.Width / 10;
+      Settings.Width = this.Width / 7.92;
+      Logout.Width = this.Width / 7.92;
+      Admin.Width = this.Width / 7.92;      
 
-      // Достаём размеры формы из файла config.json (если они там есть)
-      var jsonobject = new JObject();
-
-      using (var readjson = new StreamReader("config.json"))
+      try // Если config.json нет, создаём его с пустыми (дефолтными) параметрами
       {
-        jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-      }      
+        // Достаём размеры формы из файла config.json (если они там есть)
+        var jsonobject = new JObject();
 
-      if ((double)jsonobject["width"] != 0 && (double)jsonobject["height"] != 0)
+        using (var readjson = new StreamReader("config.json"))
+        {
+          jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
+        }
+
+        if ((double)jsonobject["width"] != 0 && (double)jsonobject["height"] != 0)
+        {
+          this.Width = (double)jsonobject["width"];
+          this.Height = (double)jsonobject["height"];
+        }
+      }
+      catch
       {
-        this.Width = (double)jsonobject["width"];
-        this.Height = (double)jsonobject["height"];
+        var jsonobject = new JObject();
+
+        jsonobject.Add("nickname", "null");
+        jsonobject.Add("login", "null");
+        jsonobject.Add("password", "null");
+        jsonobject.Add("width", 500);
+        jsonobject.Add("height", 500);
+        jsonobject.Add("isAdmin", false);
+        jsonobject.Add("autologin", false);
+
+        using (var writejson = new StreamWriter("config.json"))
+        {
+          writejson.Write(jsonobject.ToString());
+        }
       }
     }    
 
@@ -67,7 +93,8 @@ namespace ClientForMessenger
       TypeTextBox.Width = this.Width / 1.6;
       SendButton.Width = this.Width / 10;
       Settings.Width = this.Width / 7.92;
-      Logout.Width = this.Width / 7.92;      
+      Logout.Width = this.Width / 7.92;
+      Admin.Width = this.Width / 7.92;
     }    
 
     public async Task GetMessages() // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
@@ -86,25 +113,32 @@ namespace ClientForMessenger
 
         string nick = (string)jsonobject["nickname"];
         
+        try
+				{
+          Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
+          {
+            operation.GetMessages(out get); // Принимаем все сообщения       
 
-        Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
-        {
-          operation.GetMessages(out get); // Принимаем все сообщения       
-                    
-          MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
-          foreach(Message m in get) // Заносим все сообщения в панельку
-          {     
-            if (m.userName == nick)
+            MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
+            foreach (Message m in get) // Заносим все сообщения в панельку
             {
-              m.userName = "You";
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right });
+              if (m.userName == nick)
+              {
+                m.userName = "You";
+                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });
+              }
+              else
+              {
+                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left, FontSize = 15 });
+              }
             }
-            else
-            {
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left });
-            }                             
-          }
-        });
+          });
+        }
+        catch
+				{
+          MessageBox.Show("Lost connection to the server");
+          App.Current.Shutdown();
+				}
         await Task.Delay(1);
       }      
     }
@@ -119,7 +153,7 @@ namespace ClientForMessenger
         using (var readjson = new StreamReader("config.json"))
         {
           jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-        }
+        }        
 
         Message newMessage = new Message((string)jsonobject["nickname"], TypeTextBox.Text); // Создаём новое сообщение с текстом из TextBox
         bool result = operation.SendMessage(newMessage); // Отправляем сообщение     
@@ -175,7 +209,7 @@ namespace ClientForMessenger
       using (var writejson = new StreamWriter("config.json"))
       {
         writejson.Write(jsonobject.ToString());
-      }
+      }      
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e)
@@ -239,6 +273,50 @@ namespace ClientForMessenger
     {
       AdminConsole console = new AdminConsole();
       console.Show();
+    }
+
+    // Обрабатываем полный экран
+    private void Main_StateChanged(object sender, EventArgs e)
+    {      
+      if (this.WindowState == WindowState.Maximized)
+      { 
+        if (IsFullWindowed == false)
+				{
+          this.WindowState = WindowState.Normal;
+          this.Width = SystemParameters.WorkArea.Width;
+          this.Height = SystemParameters.WorkArea.Height;
+
+          // Располагаем окошко по центру 
+          this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2 + SystemParameters.WorkArea.Left;
+          this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2 + SystemParameters.WorkArea.Top;
+
+          TypeTextBox.Width = this.Width / 1.6;
+          SendButton.Width = this.Width / 10;
+          Settings.Width = this.Width / 7.92;
+          Logout.Width = this.Width / 7.92;
+          Admin.Width = this.Width / 7.92;
+
+          IsFullWindowed = true;
+        }
+        else
+				{
+          this.WindowState = WindowState.Normal;
+          this.Width = 1000;
+          this.Height = 500;
+
+          // Располагаем окошко по центру 
+          this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2 + SystemParameters.WorkArea.Left;
+          this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2 + SystemParameters.WorkArea.Top;
+
+          TypeTextBox.Width = this.Width / 1.6;
+          SendButton.Width = this.Width / 10;
+          Settings.Width = this.Width / 7.92;
+          Logout.Width = this.Width / 7.92;
+          Admin.Width = this.Width / 7.92;
+
+          IsFullWindowed = false;
+        }
+      }      
     }
   }
 }
