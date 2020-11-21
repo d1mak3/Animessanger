@@ -22,7 +22,7 @@ namespace ClientForMessenger
   {
     MessagesOperationHandler operation = new MessagesOperationHandler();
     bool IsFullWindowed = false;
-
+    public static string nickname = "null";
     public MainWindow()
     {
       InitializeComponent();      
@@ -51,8 +51,7 @@ namespace ClientForMessenger
       catch
       {
         var jsonobject = new JObject();
-
-        jsonobject.Add("nickname", "null");
+       
         jsonobject.Add("login", "null");
         jsonobject.Add("password", "null");
         jsonobject.Add("width", 500);
@@ -77,7 +76,7 @@ namespace ClientForMessenger
       }
 
       // Проверяем не стоит ли авто логин (и на всякий случай поля юзера)
-      if ((bool)jsonobject["autologin"] == false && (string)jsonobject["nickname"] != String.Empty && (string)jsonobject["login"] != String.Empty && (string)jsonobject["password"] != String.Empty)
+      if ((bool)jsonobject["autologin"] == false)
       {
         this.Visibility = Visibility.Hidden;
 
@@ -85,16 +84,35 @@ namespace ClientForMessenger
         LoginWindow login = new LoginWindow();
         login.Show();
         login.Owner = this;
-      }      
+      }   
+      // Проверяем подлинность данных в config.json
+      else if ((bool)jsonobject["autologin"] == true)
+			{
+        bool response = LoginWindow.CheckPass((string)jsonobject["login"], (string)jsonobject["password"]);
+        if (response == false)
+				{
+          using (var jsonwriter = new StreamWriter("config.json"))
+					{
+            jsonobject["autologin"] = false;
+            jsonwriter.Write(jsonobject.ToString());
+					}         
+          // Создаём окошко с логином  
+          LoginWindow login = new LoginWindow();
+          login.Show();
+          login.Owner = this;
+          this.Visibility = Visibility.Hidden;
+          
+				}
+			}
     }
 
     private void Main_SizeChanged(object sender, SizeChangedEventArgs e) // Меняем ввод и кнопку в зависимости от размеров окошка
     {
       TypeTextBox.Width = this.Width / 1.6;
       SendButton.Width = this.Width / 10;
-      Settings.Width = this.Width / 7.92;
+      Settings.Width = this.Width / (7.92 * 2);
       Logout.Width = this.Width / 7.92;
-      Admin.Width = this.Width / 7.92;
+      Admin.Width = this.Width / (7.92 * 2);
     }    
 
     public async Task GetMessages() // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
@@ -110,9 +128,7 @@ namespace ClientForMessenger
         {
           jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
         }
-
-        string nick = (string)jsonobject["nickname"];
-        
+                        
         try
 				{
           Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
@@ -122,7 +138,7 @@ namespace ClientForMessenger
             MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
             foreach (Message m in get) // Заносим все сообщения в панельку
             {
-              if (m.userName == nick)
+              if (m.userName == nickname)
               {
                 m.userName = "You";
                 MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });
@@ -155,7 +171,7 @@ namespace ClientForMessenger
           jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
         }        
 
-        Message newMessage = new Message((string)jsonobject["nickname"], TypeTextBox.Text); // Создаём новое сообщение с текстом из TextBox
+        Message newMessage = new Message(nickname, TypeTextBox.Text); // Создаём новое сообщение с текстом из TextBox
         bool result = operation.SendMessage(newMessage); // Отправляем сообщение     
         TypeTextBox.Text = String.Empty; // Стираем сообщение из TextBox
 
@@ -292,9 +308,9 @@ namespace ClientForMessenger
 
           TypeTextBox.Width = this.Width / 1.6;
           SendButton.Width = this.Width / 10;
-          Settings.Width = this.Width / 7.92;
+          Settings.Width = this.Width / (7.92 * 2);
           Logout.Width = this.Width / 7.92;
-          Admin.Width = this.Width / 7.92;
+          Admin.Width = this.Width / (7.92 * 2);
 
           IsFullWindowed = true;
         }
@@ -310,9 +326,9 @@ namespace ClientForMessenger
 
           TypeTextBox.Width = this.Width / 1.6;
           SendButton.Width = this.Width / 10;
-          Settings.Width = this.Width / 7.92;
+          Settings.Width = this.Width / (7.92 * 2);
           Logout.Width = this.Width / 7.92;
-          Admin.Width = this.Width / 7.92;
+          Admin.Width = this.Width / (7.92 * 2);
 
           IsFullWindowed = false;
         }

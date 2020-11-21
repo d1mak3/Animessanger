@@ -39,9 +39,8 @@ namespace ClientForMessenger
         checkAutoLog.IsChecked = true;
       }
 
-      InfoBlock.Text += $"\nUsername: {(string)jsonobject["nickname"]}\nLogin: {(string)jsonobject["login"]}";
+      InfoBlock.Text += $"\nUsername: {MainWindow.nickname}\nLogin: {(string)jsonobject["login"]}";
     }
-
 
     // Обработчики флажка
     private void checkAutoLog_Checked(object sender, RoutedEventArgs e)

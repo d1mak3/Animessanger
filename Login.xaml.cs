@@ -31,27 +31,26 @@ namespace ClientForMessenger
     {      
       if (Owner.Visibility == Visibility.Hidden) 
         Application.Current.Shutdown();
-    }    
+    }
 
-    private void Button_Click(object sender, RoutedEventArgs e) // Если успешный логин, то открываем основное окно
+    public static bool CheckPass(string _login, string _password)
     {
-      if (loginTextBox.Text != String.Empty && passwordBox.Password != String.Empty) // Если поля заполнены
+      if (_login != String.Empty && _password != String.Empty) // Если поля заполнены
       {
-        if (loginTextBox.Text.IndexOf("%") != -1)
+        if (_login.IndexOf("%") != -1) // Ники со знаком % запрещены !!!
         {
           MessageBox.Show("Логин не должен содержать знак %");
-          loginTextBox.Text = String.Empty;
+          return false;
         }
         else
         {
-          UserData user = new UserData("null", loginTextBox.Text, passwordBox.Password); // Заполняем юзера для проверки
+          UserData user = new UserData("null", _login, _password); // Заполняем юзера для проверки
           string response = user.LoginCheck(); // Записываем ответ проверки
 
           if (response == "You are banned")
           {
             MessageBox.Show("You are banned");
-            loginTextBox.Text = String.Empty;
-            passwordBox.Password = String.Empty;
+            return false;
           }
 
           // Обрабатываем ответ
@@ -72,8 +71,8 @@ namespace ClientForMessenger
                   json = readjson.ReadToEnd();
                 }
 
-                var jsonobject = JObject.Parse(json);
-                jsonobject["nickname"] = user.nickname;
+                MainWindow.nickname = user.nickname;
+                var jsonobject = JObject.Parse(json);                
                 jsonobject["login"] = user.login;
                 jsonobject["password"] = user.password;
 
@@ -93,8 +92,7 @@ namespace ClientForMessenger
             else // Если config.json не создан
             {
               var jsonobject = new JObject();
-
-              jsonobject.Add("nickname", user.nickname);
+              
               jsonobject.Add("login", user.login);
               jsonobject.Add("password", user.password);
               jsonobject.Add("width", 500);
@@ -107,21 +105,28 @@ namespace ClientForMessenger
                 writejson.Write(jsonobject.ToString());
               }
             }
-            if (response != "You are banned")
-            {
-              Owner.Visibility = Visibility.Visible;
-              this.Close();
-            }
+
+            return true;
           }
           else // Если пришёл не ник, выводим то, что пришло
           {
             MessageBox.Show(response);
+            return false;
           }
-        }
+        }        
       }
+      return false;
+    }
 
-      else // Если поля не заполнены, сообщаем об этом
-        MessageBox.Show("Поля не должны быть пустыми");
+    private void Button_Click(object sender, RoutedEventArgs e) // Если успешный логин, то открываем основное окно
+    {
+      bool response = CheckPass(loginTextBox.Text, passwordBox.Password);
+      loginTextBox.Text = String.Empty; passwordBox.Password = String.Empty;
+      if (response == true)
+			{
+        Owner.Visibility = Visibility.Visible;
+        this.Close();
+			}
     }
 
     private void Button_Click_1(object sender, RoutedEventArgs e) // Если нажали на Sign Up, то открываем окно регистрации
