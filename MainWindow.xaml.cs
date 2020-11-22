@@ -238,8 +238,8 @@ namespace ClientForMessenger
     {
       Settings settingsWindow = new Settings();
       settingsWindow.Owner = this;
-      settingsWindow.Show();
-      this.IsEnabled = false;
+      settingsWindow.Show();      
+      this.Visibility = Visibility.Hidden;
     }
 
     // Нажатие кнопки Log out

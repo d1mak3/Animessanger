@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="443.613" ResizeMode="NoResize" WindowStyle="ToolWindow" SizeChanged="Window_SizeChanged" Closed="Window_Closed">
+        Title="Settings" Height="450" Width="443.613" ResizeMode="NoResize" WindowStyle="ToolWindow" Closed="Window_Closed" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120*"></RowDefinition>

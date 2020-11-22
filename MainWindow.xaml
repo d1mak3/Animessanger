@@ -26,7 +26,7 @@
                 <RowDefinition Height="389*"></RowDefinition>
                 <RowDefinition Height="31*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Rectangle Grid.Row="0" Fill="#FF7AC9FF" Opacity="0.75"/>
+            <Rectangle Grid.Row="0" Fill="White" Opacity="0.75"/>
             <Border BorderBrush="Gray" BorderThickness="2">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent" >
                     <StackPanel x:Name="MessagePanel" Grid.Row="0" Loaded="MessagePanel_Loaded" Background="Transparent" CanHorizontallyScroll="True"></StackPanel>

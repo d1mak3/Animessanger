@@ -27,12 +27,14 @@ namespace ClientForMessenger
       InitializeComponent();      
     }
 
-    private void Window_Closed(object sender, EventArgs e) // Закрываем клиент, если юзер закрыл окошко логина
+    // Закрываем клиент, если юзер закрыл окошко логина
+    private void Window_Closed(object sender, EventArgs e) 
     {      
       if (Owner.Visibility == Visibility.Hidden) 
         Application.Current.Shutdown();
     }
 
+    // Проверка правильности пары логин - пароль
     public static bool CheckPass(string _login, string _password)
     {
       if (_login != String.Empty && _password != String.Empty) // Если поля заполнены
@@ -117,7 +119,8 @@ namespace ClientForMessenger
       return false;
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e) // Если успешный логин, то открываем основное окно
+    // Если успешный логин, то открываем основное окно
+    private void Button_Click(object sender, RoutedEventArgs e) 
     {
       bool response = CheckPass(loginTextBox.Text, passwordBox.Password);
       loginTextBox.Text = String.Empty; passwordBox.Password = String.Empty;
@@ -128,7 +131,8 @@ namespace ClientForMessenger
 			}
     }
 
-    private void Button_Click_1(object sender, RoutedEventArgs e) // Если нажали на Sign Up, то открываем окно регистрации
+    // Если нажали на Sign Up, то открываем окно регистрации
+    private void Button_Click_1(object sender, RoutedEventArgs e)
     {
       Reg openReg = new Reg();
       openReg.Owner = this;
@@ -136,6 +140,7 @@ namespace ClientForMessenger
       this.Visibility = Visibility.Hidden;
     }    
             
+    // Если нажали на окошко логина, то убираем надпись Login, а если окошко потеряло фокус, то возвращаем эту надпись
     private void loginTextBox_GotFocus(object sender, RoutedEventArgs e)
     {
       if (loginTextBox.Text == "Login: ")
@@ -156,6 +161,7 @@ namespace ClientForMessenger
       }
     }    
 
+    // Т.к. Pass: хранится в textbox, а пароль записывается в passwordbox, при получении фокуса на textbox, мы показываем passwordbox, а при потере фокуса - наоборот
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
       passwordTextBox.Visibility = Visibility.Hidden;
@@ -172,6 +178,7 @@ namespace ClientForMessenger
       }
     }
 
+    // Обрабатываем нажатие кнопки Enter для logintextbox и passwordbox
 		private void loginTextBox_KeyUp(object sender, KeyEventArgs e)
 		{
       if (e.Key == Key.Enter)

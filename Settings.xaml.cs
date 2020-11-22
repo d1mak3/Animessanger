@@ -23,9 +23,14 @@ namespace ClientForMessenger
   {
     public Settings()
     {
-      InitializeComponent();
-      WidthBlock.Text = Convert.ToString(this.Width);
-      HeightBlock.Text = Convert.ToString(this.Height);
+      InitializeComponent();      
+    }
+
+    // Когда окошко загружается, записываем туда нужные данные
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+      WidthBlock.Text = Convert.ToString(Owner.Width);
+      HeightBlock.Text = Convert.ToString(Owner.Height);
 
       var jsonobject = new JObject();
 
@@ -75,14 +80,9 @@ namespace ClientForMessenger
       {
         jsonwriter.Write(jsonobject.ToString());
       }
-    }
+    }    
 
-    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-      WidthBlock.Text = Convert.ToString(this.Width);
-      HeightBlock.Text = Convert.ToString(this.Height);
-    }
-
+    // Обработка нажатия кнопки Enter в текстбоксах
     private void WidthBlock_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Enter)
@@ -93,7 +93,7 @@ namespace ClientForMessenger
         }
         catch
         {
-          MessageBox.Show("Wrong width (You may enter only numbers");
+          MessageBox.Show("Wrong width (You may enter only positive numbers)");
         }
       }
     }
@@ -108,19 +108,43 @@ namespace ClientForMessenger
         }
         catch
         {
-          MessageBox.Show("Wrong height (You may enter only numbers");
+          MessageBox.Show("Wrong height (You may enter only positive numbers)");
         }
       }
     }
 
+    // Обработка нажатия кнопки OK
     private void Button_Click(object sender, RoutedEventArgs e)
-    {      
+    {
+      string errors = String.Empty; // Записываем сюда ошибки
+      try
+      {
+        Owner.Width = Convert.ToInt32(WidthBlock.Text);
+      }
+      catch
+      {
+        errors += "Wrong width ";          
+      }
+      try
+      {
+        Owner.Height = Convert.ToInt32(HeightBlock.Text);
+      }
+      catch
+      {
+        errors += "Wrong height ";        
+      }
+
+      if (errors != String.Empty)
+			{
+        MessageBox.Show(errors + "(You may enter only positive numbers)");
+			}
       this.Close();
     }
 
+    // Если окно закрыли, то открываем основную форму
     private void Window_Closed(object sender, EventArgs e)
     {
-      Owner.IsEnabled = true;
-    }
-  }
+      Owner.Visibility = Visibility.Visible;
+    }		
+	}
 }
