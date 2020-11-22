@@ -87,7 +87,6 @@ namespace ClientForMessenger
                 MessageBox.Show("config.json is already opened");
                 Application.Current.Shutdown();
               }
-
             }
             else // Если config.json не создан
             {
@@ -172,6 +171,21 @@ namespace ClientForMessenger
         passwordTextBox.Visibility = Visibility.Visible;
       }
     }
-    
-  }
+
+		private void loginTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+      if (e.Key == Key.Enter)
+			{
+        passwordTextBox.Focus();
+      }
+		}
+
+		private void passwordBox_KeyUp(object sender, KeyEventArgs e)
+		{
+      if (e.Key == Key.Enter)
+			{
+        Button_Click(this, null);
+			}
+		}
+	}
 }

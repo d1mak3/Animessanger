@@ -15,14 +15,17 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace ClientForMessenger
 {  
   public partial class MainWindow : Window
   {
-    MessagesOperationHandler operation = new MessagesOperationHandler();
-    bool IsFullWindowed = false;
-    public static string nickname = "null";
+    MessagesOperationHandler operation = new MessagesOperationHandler(); // Объект, отвечающий за операции над переменными
+    bool IsFullWindowed = false; // Флаг, отвечающий за полноэкранный режим
+    public static string nickname = "null"; // Ник пользователя
+    public static bool isAdmin = false; // Флажок, отвечающий за админские права
+
     public MainWindow()
     {
       InitializeComponent();      
@@ -55,19 +58,32 @@ namespace ClientForMessenger
         jsonobject.Add("login", "null");
         jsonobject.Add("password", "null");
         jsonobject.Add("width", 500);
-        jsonobject.Add("height", 500);
-        jsonobject.Add("isAdmin", false);
+        jsonobject.Add("height", 500);        
         jsonobject.Add("autologin", false);
+        isAdmin = false;
 
         using (var writejson = new StreamWriter("config.json"))
         {
           writejson.Write(jsonobject.ToString());
         }
       }
-    }    
 
-    private void Main_Loaded_1(object sender, RoutedEventArgs e) // Когда главное окошко загрузилось
-    {    
+      // Если до сервера достучаться не удастся, то блокируем панель сообщений и кнопку отправки сообщений
+      try
+			{
+        var checkRequest = WebRequest.Create("http://localhost:5000/api/message");
+        var checkResponse = checkRequest.GetResponse();
+      }
+      catch
+			{
+        MessageBox.Show("Server isn't working. Try again later!");
+        App.Current.Shutdown();
+			}
+    }
+
+    // Обрабатываем данные из config.json при загрузке окошка
+    private void Main_Loaded_1(object sender, RoutedEventArgs e)
+    {      
       var jsonobject = new JObject(); 
 
       using (var readjson = new StreamReader("config.json"))
@@ -88,7 +104,7 @@ namespace ClientForMessenger
       // Проверяем подлинность данных в config.json
       else if ((bool)jsonobject["autologin"] == true)
 			{
-        bool response = LoginWindow.CheckPass((string)jsonobject["login"], (string)jsonobject["password"]);
+        bool response = LoginWindow.CheckPass((string)jsonobject["login"], (string)jsonobject["password"]);        
         if (response == false)
 				{
           using (var jsonwriter = new StreamWriter("config.json"))
@@ -106,16 +122,18 @@ namespace ClientForMessenger
 			}
     }
 
-    private void Main_SizeChanged(object sender, SizeChangedEventArgs e) // Меняем ввод и кнопку в зависимости от размеров окошка
+    // Меняем ввод и кнопку в зависимости от размеров окошка
+    private void Main_SizeChanged(object sender, SizeChangedEventArgs e) 
     {
       TypeTextBox.Width = this.Width / 1.6;
       SendButton.Width = this.Width / 10;
       Settings.Width = this.Width / (7.92 * 2);
       Logout.Width = this.Width / 7.92;
       Admin.Width = this.Width / (7.92 * 2);
-    }    
+    }
 
-    public async Task GetMessages() // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
+    // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
+    public async Task GetMessages() 
     {   
       List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран     
             
@@ -128,87 +146,74 @@ namespace ClientForMessenger
         {
           jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
         }
-                        
-        try
-				{
-          Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
-          {
-            operation.GetMessages(out get); // Принимаем все сообщения       
+         
+        Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
+        {          
+          operation.GetMessages(out get); // Принимаем все сообщения       
 
-            MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
-            foreach (Message m in get) // Заносим все сообщения в панельку
+          MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
+          foreach (Message m in get) // Заносим все сообщения в панельку
+          {
+            if (m.userName == nickname)
             {
-              if (m.userName == nickname)
-              {
-                m.userName = "You";
-                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });
-              }
-              else
-              {
-                MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left, FontSize = 15 });
-              }
+              m.userName = "You";
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });
             }
-          });
-        }
-        catch
-				{
-          MessageBox.Show("Lost connection to the server");
-          App.Current.Shutdown();
-				}
+            else
+            {
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left, FontSize = 15 });
+            }
+          }  
+        });                
         await Task.Delay(1);
       }      
     }
 
-    private void SendButton_Click(object sender, RoutedEventArgs e) // Отправка сообщений
+    // Отправка сообщений
+    private void SendButton_Click(object sender, RoutedEventArgs e)
     {
       if (TypeTextBox.Text != String.Empty) // Если TextBox в который мы вводим текст имеет хоть что-то
-      {
-        // Достаём логин из файла config.json
-        var jsonobject = new JObject();
-
-        using (var readjson = new StreamReader("config.json"))
-        {
-          jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-        }        
-
+      {  
         Message newMessage = new Message(nickname, TypeTextBox.Text); // Создаём новое сообщение с текстом из TextBox
         bool result = operation.SendMessage(newMessage); // Отправляем сообщение     
         TypeTextBox.Text = String.Empty; // Стираем сообщение из TextBox
 
-        if (result == true && (bool)jsonobject["isAdmin"] == false) // Если юзер - админ, но в конфиге ещё не записано, то включаем режим админа
+        if (result == true && isAdmin == false) // Если юзер - админ, но в конфиге ещё не записано, то включаем режим админа
         {
-          jsonobject["isAdmin"] = true;
+          isAdmin = true;
           MessageBox.Show("Admin mode: ON");
-          Admin.Visibility = Visibility.Visible;
-          using (var jsonwriter = new StreamWriter("config.json"))
-          {
-            jsonwriter.Write(jsonobject.ToString());
-          }
+          Admin.Visibility = Visibility.Visible;          
         }
         else if (result == false && newMessage.message == "/admin") // Если юзер - не админ
         {
           MessageBox.Show("You are not admin");
         }
-        else if (result == true && (bool)jsonobject["isAdmin"] == true) // Если юзер - админ, и в конфиге это уже записано, то отключаем режим админа
+        else if (result == true && isAdmin == true) // Если юзер - админ, и в конфиге это уже записано, то отключаем режим админа
         {
           MessageBox.Show("Admin mode: OFF");
-          jsonobject["isAdmin"] = false;
-          Admin.Visibility = Visibility.Hidden;
-          using (var jsonwriter = new StreamWriter("config.json"))
-          {
-            jsonwriter.Write(jsonobject.ToString());
-          }
+          isAdmin = false;
+          Admin.Visibility = Visibility.Hidden;          
         }
       }
 
       TypeTextBox.Focus();
     }
 
-    private async void MessagePanel_Loaded(object sender, RoutedEventArgs e) // Вызываем асинхронный приём сообщений при загрузке основного окошечка
+    // Вызываем асинхронный приём сообщений при загрузке основного окошечка
+    private async void MessagePanel_Loaded(object sender, RoutedEventArgs e) 
     {
-      await GetMessages();
+      try
+			{
+        await GetMessages();
+      }
+      catch
+			{
+        MessageBox.Show("Server isn't working. Try again later!");
+        App.Current.Shutdown();
+			}
     }
 
+    // Сохраняем размеры формы при закрытии
     private void Main_Closed(object sender, EventArgs e) 
     {
       // Записываем размеры окна в config.json
@@ -228,6 +233,7 @@ namespace ClientForMessenger
       }      
     }
 
+    // Нажатие кнопки Settings
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
       Settings settingsWindow = new Settings();
@@ -236,6 +242,7 @@ namespace ClientForMessenger
       this.IsEnabled = false;
     }
 
+    // Нажатие кнопки Log out
     private void Logout_Click(object sender, RoutedEventArgs e)
     {
       var jsonobject = new JObject();
@@ -247,7 +254,7 @@ namespace ClientForMessenger
 
       this.Visibility = Visibility.Hidden;
       jsonobject["autologin"] = false;
-      jsonobject["isAdmin"] = false;
+      isAdmin = false;
 
       using (var writejson = new StreamWriter("config.json"))
       {
@@ -259,6 +266,7 @@ namespace ClientForMessenger
       login.Show();
     }
 
+    // Обрабатываем изменение Visibility окна (для того, чтобы отключать админку и выключать панельку сообщений)
     private void Main_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
       if (this.Visibility == Visibility.Hidden)
@@ -274,7 +282,7 @@ namespace ClientForMessenger
           jsonobject = JObject.Parse(jsonreader.ReadToEnd());
         }
 
-        if ((bool)jsonobject["isAdmin"] == true)
+        if (isAdmin == true)
         {
           Admin.Visibility = Visibility.Visible;
         }
@@ -282,12 +290,16 @@ namespace ClientForMessenger
         {
           Admin.Visibility = Visibility.Hidden;
         }
+
+        TypeTextBox.Focus();
       }
     }
 
+    // Нажатие кнопки Admin
     private void Admin_Click(object sender, RoutedEventArgs e)
     {
       AdminConsole console = new AdminConsole();
+      console.Owner = this;
       console.Show();
     }
 
@@ -334,5 +346,14 @@ namespace ClientForMessenger
         }
       }      
     }
-  }
+
+    // Отправляем сообщении при нажатии Enter и фокусе на текстбоксе
+		private void TypeTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+      if (TypeTextBox.IsFocused == true && e.Key == Key.Enter)
+			{
+        SendButton_Click(TypeTextBox, null);
+			}
+		}
+	}
 }

@@ -28,6 +28,7 @@ namespace ClientForMessenger
       mainconsole.Focus();
     }
 
+    // Обрабатываем нажатие enter в окошке
     private void mainconsole_KeyUp(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Enter) // Обрабатываем отправку запроса

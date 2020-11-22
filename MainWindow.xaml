@@ -33,7 +33,7 @@
                 </ScrollViewer>
             </Border>
             <!--Ввод и кнопка отправки-->
-            <TextBox Grid.Row="1" Background="#FF383838" HorizontalAlignment="Left" x:Name="TypeTextBox" TextWrapping="Wrap" CaretBrush="White" Foreground="White"/>
+            <TextBox Grid.Row="1" Background="#FF383838" HorizontalAlignment="Left" x:Name="TypeTextBox" TextWrapping="Wrap" CaretBrush="White" Foreground="White" KeyUp="TypeTextBox_KeyUp"/>
             <Button Grid.Row="1" Background="#FF263AFF" HorizontalAlignment="Right" Content="Send" x:Name="SendButton" Click="SendButton_Click"/>
         </Grid>  
         <!--Доп функции-->
