@@ -13,29 +13,33 @@ namespace ServerForMessanger.Controllers
   [ApiController]
   public class LoginController : Controller
   {
-    static List<User> onlineUsers = new List<User>();
-    static List<User> offlineUsers = new List<User>();
-    static List<User> bannedUsers = new List<User>();
+    public static Dictionary<User, int> onlineUsers = new Dictionary<User, int>();
     public static List<User> allUsers = new List<User>();
 
-    private static void Fill(List<User> _users) // Метод, с помощью которого мы записываем данные из файлов в оперативную память
+    // Метод, с помощью которого мы записываем данные из файлов в оперативную память
+    public static void Fill(List<User> _users)
     {
       if (_users.Count == 0 && _users == allUsers) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
       {
         StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader = readAllUsers.ReadLine();        
+        string reader = readAllUsers.ReadLine();
 
         allUsers = JsonSerializer.Deserialize<List<User>>(reader);
-        offlineUsers = allUsers;
 
         readAllUsers.Close();
+
+        // Записываем юзеров в список онлайна
+        foreach (User u in allUsers)
+        {
+          onlineUsers.Add(u, 0);
+        }
       }
-      else if (_users.Count == 0 && _users == bannedUsers) // Если в bannedUsers ничего нет, то пробуем добавить туда юзеров из файла
+      else if (_users.Count == 0 && _users == AdminController.bannedUsers) // Если в bannedUsers ничего нет, то пробуем добавить туда юзеров из файла
       {
         StreamReader readAllUsers = new StreamReader("Banlist.txt");
         string reader = readAllUsers.ReadLine();
 
-        bannedUsers = JsonSerializer.Deserialize<List<User>>(reader);
+        AdminController.bannedUsers = JsonSerializer.Deserialize<List<User>>(reader);
 
         readAllUsers.Close();
       }
@@ -55,10 +59,10 @@ namespace ServerForMessanger.Controllers
     public string CheckPass(User _userForCheck) // Проверка пароля
     {
       Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
-      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
+      Fill(AdminController.bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
 
       // Проверяем, есть ли юзер в банлисте
-      foreach(User u in bannedUsers)
+      foreach (User u in AdminController.bannedUsers)
       {
         if (u.login == _userForCheck.login)
         {
@@ -66,7 +70,7 @@ namespace ServerForMessanger.Controllers
         }
       }
 
-      // Ищем юзера с таким же логином
+      // Ищем юзера с таким же логином     
       User temp = new User();
       foreach (User u in allUsers)
       {
@@ -77,80 +81,39 @@ namespace ServerForMessanger.Controllers
           break;
         }
       }
-      if (temp.password == null) // Если не нашли
+      if (temp.nickName == null) // Если не нашли
         return "There is no account with this login";
 
       // Проверяем пароль
       if (BCrypt.Net.BCrypt.Verify(_userForCheck.password, temp.password) == true)
       {
-        bool checkForOnline = false;
-        foreach (User u in onlineUsers)
+        _userForCheck = temp;
+        if (onlineUsers[_userForCheck] == 0)
         {
-          if (u.nickName == _userForCheck.nickName)
-            checkForOnline = true;
+          messageController.allMessages.AddMessage("Server", $"{_userForCheck.nickName} is now online!");
         }
-        if (checkForOnline == false)
-          onlineUsers.Add(_userForCheck);
-
+        onlineUsers[_userForCheck]++;
         return _userForCheck.nickName;
       }
-      else
-        return "Wrong login or password";
+      return "Wrong login or password";
     }
 
     // DELETE api/login/nickname
     [HttpDelete("{nickname}")]
-    public string BanUser(string nickname)
-    {
-      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
-      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
-
-      foreach (User u in allUsers)
-      {
+    public void GettingOffline(string nickname)
+		{
+      foreach(User u in allUsers)
+			{
         if (u.nickName == nickname)
-        {
-          using (StreamWriter writejson = new StreamWriter("Banlist.txt"))
-          {
-            bannedUsers.Add(u);
-            writejson.Write(JsonSerializer.Serialize(bannedUsers));
-          }
-          using (StreamWriter writejson = new StreamWriter("Users.txt"))
-          {
-            allUsers.Remove(u);
-            writejson.Write(JsonSerializer.Serialize(allUsers));
-          }
-          return "Successful";
-        }
-      }
-
-      return "There is no user with this nickname";
-    }
-
-    // POST api/login/nickname
-    [HttpPost("{nickname}")]
-    public string UnbanUser(string nickname)
-    {
-      Fill(allUsers); // Пытаемся заполнить allUsers, если там ничего нет
-      Fill(bannedUsers); // Пытаемся заполнить bannedUsers, если там ничего нет
-
-      foreach (User u in bannedUsers)
-      {
-        if (u.nickName == nickname)
-        {
-          using (StreamWriter writejson = new StreamWriter("Users.txt"))
-          {
-            allUsers.Add(u);
-            writejson.Write(JsonSerializer.Serialize(allUsers));
-          }
-          using (StreamWriter writejson = new StreamWriter("Banlist.txt"))
-          {
-            bannedUsers.Remove(u);
-            writejson.Write(JsonSerializer.Serialize(bannedUsers));
-          }
-          return "Successful";
-        }        
-      }
-      return "There are no users with this nick in banlist";
-    }
+				{
+          onlineUsers[u]--;
+          Console.WriteLine($"{u.nickName}" + $"{onlineUsers[u]}");
+          if (onlineUsers[u] == 0)
+					{
+            messageController.allMessages.AddMessage("Server", $"{u.nickName} has left the chat");
+					}
+				}
+			}      
+		}
   }
 }

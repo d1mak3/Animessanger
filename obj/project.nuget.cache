@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "VtqieymTsspfQBr7k8PUv5DFHI9Q3wK/3vgaKoG/AsDAH/KDfHSX1XPgJ7qUvOKvAb6rVpqjl5m3lyEawzavEA==",
+  "dgSpecHash": "KUn2ELhx0mRxzoMl6+5XgTBJoJEPchE7Wlk2nfk9jpRiyYQeoyHnXQR3m4eN9h/jVobkp21V7VwsaM+DrHDV5w==",
   "success": true,
   "projectFilePath": "C:\\Users\\ДИМОООООООН\\source\\repos\\ServerForMessanger\\ServerForMessanger.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\bcrypt.net-next\\4.0.0\\bcrypt.net-next.4.0.0.nupkg.sha512",
+    "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
     "C:\\Users\\ДИМОООООООН\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512"
   ],

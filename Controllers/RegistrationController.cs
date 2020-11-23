@@ -11,28 +11,25 @@ namespace ServerForMessanger.Controllers
   [Route("api/[controller]")]
   [ApiController]
   public class RegistrationController : Controller
-  {
-    List<User> allUsers = new List<User>();
-
+  {  
     // POST api/registration
     [HttpPost]
     public string Registration(User _newUser) // Регистрируем юзера
     {
-      if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
-      {
-        StreamReader readAllUsers = new StreamReader("Users.txt");
-        string reader;
-        while ((reader = readAllUsers.ReadLine()) != null)
-        {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));          
-        }
-        readAllUsers.Close();
-      }
-
+      
+      LoginController.Fill(LoginController.allUsers);
+      LoginController.Fill(AdminController.bannedUsers); 
 
       // Проверяем использован ли ник или логин
       bool checkNameUsed = false;
-      foreach (User u in allUsers)
+
+      foreach (User u in AdminController.bannedUsers)
+			{
+        if (u.login == _newUser.login || u.nickName == _newUser.login)
+          checkNameUsed = true;
+			}
+      
+      foreach (User u in LoginController.allUsers)
       {
         if (_newUser.login == u.login || _newUser.nickName == u.nickName)
         {
@@ -48,10 +45,13 @@ namespace ServerForMessanger.Controllers
         if (_newUser.password != null)
           _newUser.password = BCrypt.Net.BCrypt.HashPassword(_newUser.password);
 
-        StreamWriter writeUserInFile = new StreamWriter("Users.txt", true);
-        writeUserInFile.WriteLine(JsonSerializer.Serialize(_newUser));
-        writeUserInFile.Close();
-        LoginController.allUsers.Add(_newUser);
+        StreamWriter writeUserInFile = new StreamWriter("Users.txt");
+        LoginController.allUsers.Add(_newUser);        
+        writeUserInFile.WriteLine(JsonSerializer.Serialize(LoginController.allUsers));
+        writeUserInFile.Close();  
+        
+        LoginController.onlineUsers.Add(_newUser, 0);
+        messageController.allMessages.AddMessage("Server", $"{_newUser.nickName} just registered. Welcome!");
         return "Sucсessful";
       }
       return "nickname or login is already used";
@@ -61,18 +61,18 @@ namespace ServerForMessanger.Controllers
     [HttpGet]
     public string GetAllUsers() // Возвращаем всех юзеров
     {
-      if (allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
+      if (LoginController.allUsers.Count == 0) // Если в allUsers ничего нет, то пробуем добавить туда юзеров из файла
       {
         StreamReader readAllUsers = new StreamReader("Users.txt");
         string reader;
         while ((reader = readAllUsers.ReadLine()) != null)
         {
-          allUsers.Add(JsonSerializer.Deserialize<User>(reader));          
+          LoginController.allUsers.Add(JsonSerializer.Deserialize<User>(reader));          
         }
         readAllUsers.Close();
       }
 
-      return JsonSerializer.Serialize(allUsers).ToString(); // Возвращаем сериализованный список юзеров
+      return JsonSerializer.Serialize(LoginController.allUsers).ToString(); // Возвращаем сериализованный список юзеров
     }
   }
 }

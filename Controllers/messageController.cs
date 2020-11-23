@@ -15,7 +15,7 @@ namespace ServerForMessanger.Controllers
   [ApiController]
   public class messageController : Controller
   {
-    private static MessagesHandler allMessages = new MessagesHandler();
+    public static MessagesHandler allMessages = new MessagesHandler();
 
 
     // GET api/messages
@@ -27,10 +27,9 @@ namespace ServerForMessanger.Controllers
       {
         StreamReader readMessageInFile = new StreamReader("History.txt");
         string reader;
-        while ((reader = readMessageInFile.ReadLine()) != null)
-        {
-          allMessages.AddMessage(JsonSerializer.Deserialize<Message>(reader));
-        }
+
+        allMessages.messages = JsonSerializer.Deserialize<List<Message>>(reader = readMessageInFile.ReadToEnd());
+
         readMessageInFile.Close();
       }      
 
@@ -88,12 +87,13 @@ namespace ServerForMessanger.Controllers
           return checkAdmin;
         }
       }
-      
-      StreamWriter writeMessageInFile = new StreamWriter("History.txt", true);
-      writeMessageInFile.WriteLine(JsonSerializer.Serialize(_newMessage));
-      writeMessageInFile.Close();
-
+       
       allMessages.AddMessage(_newMessage.userName, _newMessage.message);
+
+      using (var writer = new StreamWriter("History.txt"))
+			{
+        writer.WriteLine(JsonSerializer.Serialize(allMessages.messages));
+			}
       return false;
     }
 
