@@ -149,8 +149,14 @@ namespace ClientForMessenger
             if (m.userName == nickname)
             {
               m.userName = "You";
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });              
             }
+
+            else if (m.userName == "Server")
+						{
+              MessagePanel.Children.Add(new TextBlock { Text = $"{m.message}\n\t\t{m.time}\n", HorizontalAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.ExtraLight, FontStyle = FontStyles.Italic, FontSize = 15 });
+            }
+
             else
             {
               MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left, FontSize = 15 });
@@ -185,7 +191,7 @@ namespace ClientForMessenger
           MessageBox.Show("Admin mode: OFF");
           isAdmin = false;
           Admin.Visibility = Visibility.Hidden;          
-        }
+        }        
       }
 
       TypeTextBox.Focus();
