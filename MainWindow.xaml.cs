@@ -68,7 +68,7 @@ namespace ClientForMessenger
         }
       }
 
-      // Если до сервера достучаться не удастся, то блокируем панель сообщений и кнопку отправки сообщений
+      // Если до сервера достучаться не удастся, то выключаем клиент
       try
 			{
         var checkRequest = WebRequest.Create("http://localhost:5000/api/message");
@@ -135,18 +135,10 @@ namespace ClientForMessenger
     // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
     public async Task GetMessages() 
     {   
-      List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран     
-            
-      while (true) // Приём сообщений работает, пока работает окошко
-      {
-        // Достаём ник
-        var jsonobject = new JObject();
+      List<Message> get = new List<Message>(); // Список сообщений, которые мы будем выводить на экран       
 
-        using (var readjson = new StreamReader("config.json"))
-        {
-          jsonobject = JObject.Parse(readjson.ReadToEnd()); // Парсим содержимое файла в jsonobject
-        }
-         
+      while (true) // Приём сообщений работает, пока работает окошко
+      {   
         Dispatcher.Invoke(() => // Диспетчер для того, чтобы дать возможность управлять MessagePanel потоку, который работает асинхронно
         {          
           operation.GetMessages(out get); // Принимаем все сообщения       
@@ -210,12 +202,23 @@ namespace ClientForMessenger
 			{
         MessageBox.Show("Server isn't working. Try again later!");
         App.Current.Shutdown();
-			}
+			}      
     }
 
     // Сохраняем размеры формы при закрытии
     private void Main_Closed(object sender, EventArgs e) 
     {
+      try // Используем try catch, чтобы, если не удалось подключиться к серверу, приложение не выдавало дополнительную ошибку
+			{
+        var deleteRequest = WebRequest.Create("http://localhost:5000/api/login/" + $"{nickname}");
+        deleteRequest.Method = "DELETE";
+        deleteRequest.GetResponse();
+      }
+      catch
+			{
+
+			}           
+
       // Записываем размеры окна в config.json
       var jsonobject = new JObject();
 
@@ -344,7 +347,7 @@ namespace ClientForMessenger
 
           IsFullWindowed = false;
         }
-      }      
+      }   
     }
 
     // Отправляем сообщении при нажатии Enter и фокусе на текстбоксе
@@ -354,6 +357,6 @@ namespace ClientForMessenger
 			{
         SendButton_Click(TypeTextBox, null);
 			}
-		}
+		}    
 	}
 }

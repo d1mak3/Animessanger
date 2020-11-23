@@ -5,44 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForMessenger"
         mc:Ignorable="d"        
-        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" WindowStartupLocation="CenterScreen" Icon="Resources/senchou.png" Closed="Main_Closed" IsVisibleChanged="Main_IsVisibleChanged" StateChanged="Main_StateChanged" SizeChanged="Main_SizeChanged">
-
-    <Grid x:Name="MainContainer">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*"></ColumnDefinition>
-            <ColumnDefinition Width="555*"></ColumnDefinition>
-            <ColumnDefinition Width="100*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="19*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <!--Картинкa-->
-        <Image Source="Resources/Background1.png" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Stretch="Fill"/>
-        <!--Сообщения-->
-        <!--Список сообщений-->
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="389*"></RowDefinition>
-                <RowDefinition Height="31*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Rectangle Grid.Row="0" Fill="White" Opacity="0.75"/>
-            <Border BorderBrush="Gray" BorderThickness="2">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent" >
-                    <StackPanel x:Name="MessagePanel" Grid.Row="0" Loaded="MessagePanel_Loaded" Background="Transparent" CanHorizontallyScroll="True"></StackPanel>
-                </ScrollViewer>
-            </Border>
-            <!--Ввод и кнопка отправки-->
-            <TextBox Grid.Row="1" Background="#FF383838" HorizontalAlignment="Left" x:Name="TypeTextBox" TextWrapping="Wrap" CaretBrush="White" Foreground="White" KeyUp="TypeTextBox_KeyUp"/>
-            <Button Grid.Row="1" Background="#FF263AFF" HorizontalAlignment="Right" Content="Send" x:Name="SendButton" Click="SendButton_Click"/>
-        </Grid>  
-        <!--Доп функции-->
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button x:Name="Settings" HorizontalAlignment="Right" Content="Settings" Background="#FFAFDEFF" Click="Settings_Click"></Button>
-            <Button x:Name="Admin" HorizontalAlignment="Right" Content="Admin" Background="#FFAFDEFF" Visibility="Hidden" Click="Admin_Click"></Button>                        
-        </StackPanel>
-        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="Logout" Content="Log out" MinWidth="110" Background="#FFAFDEFF" Click="Logout_Click"/>
-        </StackPanel>
-    </Grid>
+        Title="Animessenger" Height="450" Width="800" Loaded="Main_Loaded_1" WindowStartupLocation="CenterScreen" Icon="Resources/senchou.png" Closed="Main_Closed" IsVisibleChanged="Main_IsVisibleChanged" StateChanged="Main_StateChanged" SizeChanged="Main_SizeChanged">	
+	<Grid x:Name="MainContainer">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100*"></ColumnDefinition>
+			<ColumnDefinition Width="555*"></ColumnDefinition>
+			<ColumnDefinition Width="100*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition></RowDefinition>
+			<RowDefinition Height="19*"></RowDefinition>
+		</Grid.RowDefinitions>
+		<!--Картинкa-->
+		<Image Source="Resources/Background1.png" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Stretch="Fill"/>
+		<!--Сообщения-->
+		<!--Список сообщений-->
+		<Grid Grid.Column="1" Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="389*"></RowDefinition>
+				<RowDefinition Height="31*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Rectangle Grid.Row="0" Fill="White" Opacity="0.75"/>
+			<Border BorderBrush="Gray" BorderThickness="2">
+				<ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent" >
+					<StackPanel x:Name="MessagePanel" Grid.Row="0" Loaded="MessagePanel_Loaded" Background="Transparent" CanHorizontallyScroll="True"></StackPanel>
+				</ScrollViewer>
+			</Border>
+			<!--Ввод и кнопка отправки-->
+			<TextBox Grid.Row="1" Background="#FF383838" HorizontalAlignment="Left" x:Name="TypeTextBox" TextWrapping="Wrap" CaretBrush="White" Foreground="White" KeyUp="TypeTextBox_KeyUp"/>
+			<Button Grid.Row="1" Background="#FF263AFF" HorizontalAlignment="Right" Content="Send" x:Name="SendButton" Click="SendButton_Click"/>
+		</Grid>
+		<!--Доп функции-->
+		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+			<Button x:Name="Settings" HorizontalAlignment="Right" Content="Settings" Background="#FFAFDEFF" Click="Settings_Click"></Button>
+			<Button x:Name="Admin" HorizontalAlignment="Right" Content="Admin" Background="#FFAFDEFF" Visibility="Hidden" Click="Admin_Click"></Button>
+		</StackPanel>
+		<StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+			<Button x:Name="Logout" Content="Log out" MinWidth="110" Background="#FFAFDEFF" Click="Logout_Click"/>
+		</StackPanel>
+	</Grid>
 </Window>

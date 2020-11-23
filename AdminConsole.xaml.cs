@@ -56,7 +56,8 @@ namespace ClientForMessenger
                 {
                   responseBlock.Text = reader.ReadToEnd();
                 }
-              }              
+              }
+              deleteResponse.Close();
             }
             catch
             {
@@ -89,6 +90,7 @@ namespace ClientForMessenger
                 responseBlock.Text = reader.ReadToEnd();
               }
             }
+            banResponse.Close();
           }
           else
           {            
@@ -105,9 +107,7 @@ namespace ClientForMessenger
 
           if (separatedRequest.Length == 2 && fullRequest[0] == 'U') // Первая проверка на правильность введённых данных
           {
-            var banRequest = (HttpWebRequest)WebRequest.Create("http://localhost:5000/api/login/" + $"{separatedRequest[1]}"); // В request[1] хранится строка с ником
-            banRequest.Method = "POST";
-            var rstream = banRequest.GetRequestStream(); // Для того, чтобы работал метод POST
+            var banRequest = (HttpWebRequest)WebRequest.Create("http://localhost:5000/api/login/" + $"{separatedRequest[1]}"); // В request[1] хранится строка с ником    
             var banResponse = banRequest.GetResponse();
             using (var stream = banResponse.GetResponseStream())
             {
@@ -116,10 +116,49 @@ namespace ClientForMessenger
                 responseBlock.Text = reader.ReadToEnd();
               }
             }
-          }
+            banResponse.Close();
+          }         
+
           else
           {
             responseBlock.Text = "Bad request";
+          }
+        }
+
+        // Добавляем или удаляем админа по нику
+        else if (mainconsole.Text.IndexOf("ADMIN ") != -1)
+        {
+          string[] separatedRequest = mainconsole.Text.Split(' '); // Разделяем команду и id 
+          string fullRequest = mainconsole.Text;
+          mainconsole.Text = String.Empty; // Убираем сообщение после того, как сохранили ввод
+
+          if (separatedRequest.Length == 2 && fullRequest[0] == 'A') // Первая проверка на правильность введённых данных
+          {
+            var adminRequest = (HttpWebRequest)WebRequest.Create("http://localhost:5000/api/Admin/");    
+            adminRequest.Method = "POST";
+            adminRequest.ContentType = "application/json";
+
+            JsonSerializer serializer = new JsonSerializer();
+            StringWriter jsonwriter = new StringWriter();
+            serializer.Serialize(jsonwriter, new UserData { login = "null", nickname = separatedRequest[1], password = "null" }); // В request[1] хранится строка с ником
+
+            using (var writer = new StreamWriter(adminRequest.GetRequestStream()))
+						{
+              writer.Write(jsonwriter);
+						}
+
+            var adminResponse = adminRequest.GetResponse();            
+            using (var stream = adminResponse.GetResponseStream())
+            {
+              using (var reader = new StreamReader(stream))
+              {
+                if (Convert.ToBoolean(reader.ReadToEnd()) == false)
+                  responseBlock.Text = "Cannot Admin or Unadmin user (maybe user doesnt exist)";
+                else
+                  responseBlock.Text = "Successful";
+              }
+            }
+            adminResponse.Close();
           }
         }
 
