@@ -51,7 +51,7 @@ namespace ServerForMessanger.Controllers
         writeUserInFile.Close();  
         
         LoginController.onlineUsers.Add(_newUser, 0);
-        messageController.allMessages.AddMessage("Server", $"{_newUser.nickName} just registered. Welcome!");
+        MessageController.allMessages.AddMessage("Server", $"{_newUser.nickName} just registered. Welcome!");
         return "Sucсessful";
       }
       return "nickname or login is already used";

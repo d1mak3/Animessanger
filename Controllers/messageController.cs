@@ -13,7 +13,7 @@ namespace ServerForMessanger.Controllers
   //[EnableCors("CorsApi")] // Так можно ограничить запросы (точнее описано в файле startup.cs), но хз, влияет ли это на безопасность
   [Route("api/[controller]")] // Ссылка на контроллер
   [ApiController]
-  public class messageController : Controller
+  public class MessageController : Controller
   {
     public static MessagesHandler allMessages = new MessagesHandler();
 
@@ -25,12 +25,19 @@ namespace ServerForMessanger.Controllers
       // Если в списке нет сообщений пробуем загрузить их из файла
       if (allMessages.messages.Count == 0)
       {
-        StreamReader readMessageInFile = new StreamReader("History.txt");
-        string reader;
+        try
+				{
+          StreamReader readMessageInFile = new StreamReader("History.txt");
+          string reader;
 
-        allMessages.messages = JsonSerializer.Deserialize<List<Message>>(reader = readMessageInFile.ReadToEnd());
+          allMessages.messages = JsonSerializer.Deserialize<List<Message>>(reader = readMessageInFile.ReadToEnd());
 
-        readMessageInFile.Close();
+          readMessageInFile.Close();
+        }
+        catch
+				{
+          Console.WriteLine("File is empty");
+				}
       }      
 
       var messagesToJson = JsonSerializer.Serialize(allMessages.messages);
@@ -112,6 +119,9 @@ namespace ServerForMessanger.Controllers
     [HttpDelete("{id}")]
     public string DeleteElement(int id)
     {
+      if (allMessages.messages[id].userName == "Server")
+        return "Can't delete server's message";
+
       if (id < allMessages.messages.Count && id >= 0)
       {
         allMessages.messages.RemoveAt(id);

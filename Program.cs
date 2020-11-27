@@ -15,6 +15,8 @@ namespace ServerForMessanger
   {
     public static void Main(string[] args)
     {
+      Controllers.MessageController.allMessages.AddMessage(new Message());
+
       CreateHostBuilder(args).Build().Run();
     }
 

@@ -121,7 +121,7 @@ namespace ServerForMessanger.Controllers
           writer.WriteLine("\n" + $"%{user.nickName}%");
         }
 
-        messageController.allMessages.AddMessage("Server", $"{user.nickName} is now admin. Congratulations!");
+        MessageController.allMessages.AddMessage("Server", $"{user.nickName} is now admin. Congratulations!");
 
         return true;
       }
@@ -147,7 +147,7 @@ namespace ServerForMessanger.Controllers
         
         System.IO.File.WriteAllLines("admins.txt", admins);
 
-        messageController.allMessages.AddMessage("Server", $"{user.nickName} has lost admin status!");
+        MessageController.allMessages.AddMessage("Server", $"{user.nickName} has lost admin status!");
 
         return true;
       }

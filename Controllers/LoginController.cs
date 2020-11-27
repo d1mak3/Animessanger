@@ -90,7 +90,7 @@ namespace ServerForMessanger.Controllers
         _userForCheck = temp;
         if (onlineUsers[_userForCheck] == 0)
         {
-          messageController.allMessages.AddMessage("Server", $"{_userForCheck.nickName} is now online!");
+          MessageController.allMessages.AddMessage("Server", $"{_userForCheck.nickName} is now online!");
         }
         onlineUsers[_userForCheck]++;
         return _userForCheck.nickName;
@@ -106,11 +106,10 @@ namespace ServerForMessanger.Controllers
 			{
         if (u.nickName == nickname)
 				{
-          onlineUsers[u]--;
-          Console.WriteLine($"{u.nickName}" + $"{onlineUsers[u]}");
+          onlineUsers[u]--;          
           if (onlineUsers[u] == 0)
 					{
-            messageController.allMessages.AddMessage("Server", $"{u.nickName} has left the chat");
+            MessageController.allMessages.AddMessage("Server", $"{u.nickName} has left the chat");
 					}
 				}
 			}      
