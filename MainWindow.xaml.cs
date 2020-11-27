@@ -146,25 +146,81 @@ namespace ClientForMessenger
           MessagePanel.Children.Clear(); // Очищаем панель, чтобы сообщения вставлялись один раз
           foreach (Message m in get) // Заносим все сообщения в панельку
           {
-            if (m.userName == nickname)
-            {
-              m.userName = "You";
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Right, FontSize = 15 });              
-            }
-
-            else if (m.userName == "Server")
-						{
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.message}\n\t\t{m.time}\n", HorizontalAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.ExtraLight, FontStyle = FontStyles.Italic, FontSize = 15 });
-            }
-
-            else
-            {
-              MessagePanel.Children.Add(new TextBlock { Text = $"{m.userName}\n{m.message}\n\t\t{m.time}", HorizontalAlignment = HorizontalAlignment.Left, FontSize = 15 });
-            }
+            AddMessageOnPanel(m);
           }  
         });                
         await Task.Delay(1);
       }      
+    }
+
+    // Добавляем сообщения в MessagePanel
+    private void AddMessageOnPanel(Message _newMessage)
+		{
+      if (_newMessage.userName == nickname)
+      {
+        MessagePanel.Children.Add(new TextBlock // Ник
+        {
+          Text = "You",
+          HorizontalAlignment = HorizontalAlignment.Right,
+          Foreground = Brushes.Blue, 
+          FontSize = 15
+        });
+        MessagePanel.Children.Add(new TextBlock // Сообщение
+        {
+          Text = $"{_newMessage.message}",
+          HorizontalAlignment = HorizontalAlignment.Right,
+          Foreground = Brushes.Black,
+          FontSize = 15
+        });
+        MessagePanel.Children.Add(new TextBlock // Дата
+        {
+          Text = $"{_newMessage.time}",
+          HorizontalAlignment = HorizontalAlignment.Right,
+          Foreground = Brushes.Gray,
+          FontStyle = FontStyles.Italic,
+          FontWeight = FontWeights.Light, 
+          FontSize = 15
+        });
+      }
+
+      else if (_newMessage.userName == "Server")
+      {
+        MessagePanel.Children.Add(new TextBlock
+        {
+          Text = $"{_newMessage.message}  {_newMessage.time}\n",
+          HorizontalAlignment = HorizontalAlignment.Center,
+          FontWeight = FontWeights.ExtraLight,
+          FontStyle = FontStyles.Italic,
+          FontSize = 15
+        });
+      }
+
+      else
+      {
+        MessagePanel.Children.Add(new TextBlock // Ник
+        {
+          Text = $"{_newMessage.userName}",
+          HorizontalAlignment = HorizontalAlignment.Left,
+          Foreground = Brushes.Blue,
+          FontSize = 15
+        });
+        MessagePanel.Children.Add(new TextBlock // Сообщение
+        {
+          Text = $"{_newMessage.message}",
+          HorizontalAlignment = HorizontalAlignment.Left,
+          Foreground = Brushes.Black,
+          FontSize = 15
+        });
+        MessagePanel.Children.Add(new TextBlock // Дата
+        {
+          Text = $"{_newMessage.time}\n",
+          HorizontalAlignment = HorizontalAlignment.Left,
+          Foreground = Brushes.Gray,
+          FontStyle = FontStyles.Italic,
+          FontWeight = FontWeights.Light,
+          FontSize = 15
+        });
+      }
     }
 
     // Отправка сообщений
