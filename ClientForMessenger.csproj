@@ -61,6 +61,9 @@
     <Compile Include="AdminConsole.xaml.cs">
       <DependentUpon>AdminConsole.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Emoji.xaml.cs">
+      <DependentUpon>Emoji.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -72,6 +75,10 @@
       <DependentUpon>Reg.xaml</DependentUpon>
     </Compile>
     <Page Include="AdminConsole.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Emoji.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

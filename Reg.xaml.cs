@@ -88,6 +88,9 @@ namespace ClientForMessenger
     // Обрабатываем кнопку регистрации
     private void Button_Click(object sender, RoutedEventArgs e)
     {
+      if (NicknameBox.Text.IndexOf("%") != -1)
+        MessageBox.Show("You can't use nickname with '%' !");
+
       if ((NicknameBox.Text != String.Empty || NicknameBox.Text != "Nick: ") && (LoginBox.Text != String.Empty || LoginBox.Text != "Login: ")
         && (PasswordBox.Text != String.Empty || PasswordBox.Text != "Pass: ")) // Проверяем, чтобы текстбоксы были заполнены
       {

@@ -28,12 +28,9 @@ namespace ClientForMessenger
 
     public MainWindow()
     {
-      InitializeComponent();      
-      TypeTextBox.Width = this.Width / 1.6;
-      SendButton.Width = this.Width / 10;
-      Settings.Width = this.Width / 7.92;
-      Logout.Width = this.Width / 7.92;
-      Admin.Width = this.Width / 7.92;      
+      InitializeComponent();
+
+      FixUISizes();
 
       try // Если config.json нет, создаём его с пустыми (дефолтными) параметрами
       {
@@ -78,7 +75,18 @@ namespace ClientForMessenger
 			{
         MessageBox.Show("Server isn't working. Try again later!");
         App.Current.Shutdown();
-			}
+			}     
+    }
+
+    // Изменяем размер некоторых UI элементов относительно размеров окошка
+    private void FixUISizes()
+		{
+      TypeTextBox.Width = this.Width / 1.65;
+      SendButton.Width = this.Width / 20;
+      EmojiButton.Width = this.Width / 20;
+      Settings.Width = this.Width / 7.92;
+      Logout.Width = this.Width / 7.92;
+      Admin.Width = this.Width / 7.92;
     }
 
     // Обрабатываем данные из config.json при загрузке окошка
@@ -103,7 +111,7 @@ namespace ClientForMessenger
       }   
       // Проверяем подлинность данных в config.json
       else if ((bool)jsonobject["autologin"] == true)
-			{
+		  {
         bool response = LoginWindow.CheckPass((string)jsonobject["login"], (string)jsonobject["password"]);        
         if (response == false)
 				{
@@ -118,18 +126,15 @@ namespace ClientForMessenger
           login.Owner = this;
           this.Visibility = Visibility.Hidden;
           
-				}
-			}
+		    }
+	    }
+      InfoBlock.Text = $"Username: {nickname}\nLogin: {(string)jsonobject["login"]}";
     }
 
     // Меняем ввод и кнопку в зависимости от размеров окошка
     private void Main_SizeChanged(object sender, SizeChangedEventArgs e) 
     {
-      TypeTextBox.Width = this.Width / 1.6;
-      SendButton.Width = this.Width / 10;
-      Settings.Width = this.Width / (7.92 * 2);
-      Logout.Width = this.Width / 7.92;
-      Admin.Width = this.Width / (7.92 * 2);
+      FixUISizes();
     }
 
     // Асинхронный (чтобы приложение не зависало) метод, который осуществляет приём сообщений
@@ -383,11 +388,7 @@ namespace ClientForMessenger
           this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2 + SystemParameters.WorkArea.Left;
           this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2 + SystemParameters.WorkArea.Top;
 
-          TypeTextBox.Width = this.Width / 1.6;
-          SendButton.Width = this.Width / 10;
-          Settings.Width = this.Width / (7.92 * 2);
-          Logout.Width = this.Width / 7.92;
-          Admin.Width = this.Width / (7.92 * 2);
+          FixUISizes();
 
           IsFullWindowed = true;
         }
@@ -401,11 +402,7 @@ namespace ClientForMessenger
           this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2 + SystemParameters.WorkArea.Left;
           this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2 + SystemParameters.WorkArea.Top;
 
-          TypeTextBox.Width = this.Width / 1.6;
-          SendButton.Width = this.Width / 10;
-          Settings.Width = this.Width / (7.92 * 2);
-          Logout.Width = this.Width / 7.92;
-          Admin.Width = this.Width / (7.92 * 2);
+          FixUISizes();
 
           IsFullWindowed = false;
         }
@@ -419,6 +416,11 @@ namespace ClientForMessenger
 			{
         SendButton_Click(TypeTextBox, null);
 			}
-		}    
+		}
+
+		private void EmojiButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

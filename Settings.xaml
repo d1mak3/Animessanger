@@ -14,8 +14,7 @@
             <RowDefinition Height="60*"></RowDefinition>
             <RowDefinition Height="200*"></RowDefinition>
             <RowDefinition Height="60*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <TextBlock x:Name="InfoBlock" Grid.Row="0" Text="You are now logged as: " FontSize="20" HorizontalAlignment="Center" TextWrapping="NoWrap" Background="LightBlue" FontWeight="ExtraLight" FontStyle="Italic"/>
+        </Grid.RowDefinitions>        
         <TextBlock FontSize="30" Grid.Row="1">
             <Run Text="Autologin"/>
             <InlineUIContainer>

@@ -42,9 +42,7 @@ namespace ClientForMessenger
       if ((bool)jsonobject["autologin"] == true)
       {
         checkAutoLog.IsChecked = true;
-      }
-
-      InfoBlock.Text += $"\nUsername: {MainWindow.nickname}\nLogin: {(string)jsonobject["login"]}";
+      }      
     }
 
     // Обработчики флажка

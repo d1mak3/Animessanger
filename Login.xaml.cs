@@ -125,10 +125,12 @@ namespace ClientForMessenger
       bool response = CheckPass(loginTextBox.Text, passwordBox.Password);
       loginTextBox.Text = String.Empty; passwordBox.Password = String.Empty;
       if (response == true)
-			{
+      {
         Owner.Visibility = Visibility.Visible;
         this.Close();
-			}
+      }
+      else
+        loginTextBox.Focus();
     }
 
     // Если нажали на Sign Up, то открываем окно регистрации
